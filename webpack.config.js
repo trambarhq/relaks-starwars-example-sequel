@@ -5,7 +5,6 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var DefinePlugin = Webpack.DefinePlugin;
 var NamedChunksPlugin = Webpack.NamedChunksPlugin;
 var NamedModulesPlugin = Webpack.NamedModulesPlugin;
-var SourceMapDevToolPlugin = Webpack.SourceMapDevToolPlugin;
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -65,9 +64,6 @@ module.exports = {
     plugins: [
         new NamedChunksPlugin,
         new NamedModulesPlugin,
-        new SourceMapDevToolPlugin({
-            filename: '[file].map',
-        }),
         new HtmlWebpackPlugin({
             template: Path.resolve(`./src/index.html`),
             filename: Path.resolve(`./www/index.html`),
@@ -77,6 +73,7 @@ module.exports = {
             reportFilename: `report.html`,
         }),
     ],
+    devtool: (event === 'build') ? 'inline-source-map' : false,
     devServer: {
         inline: true,
         historyApiFallback: {
@@ -99,7 +96,8 @@ if (event === 'build') {
     // set NODE_ENV to production
     var plugins = module.exports.plugins;
     var constants = {
-        'process.env.NODE_ENV': '"production"'
+        'process.env.NODE_ENV': '"production"',
+        'process.env.INCLUDE_DISPLAY_NAME': 'true'
     };
     plugins.unshift(new DefinePlugin(constants));
 

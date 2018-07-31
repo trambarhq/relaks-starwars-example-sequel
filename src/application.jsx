@@ -4,11 +4,14 @@ import RouteManager from 'relaks-route-manager/preact';
 import SWAPI from 'swapi';
 import { Route, routes } from 'routes';
 import NavBar from 'widgets/nav-bar';
+import 'prelaks';
 import 'style.scss';
 
 /** @jsx h */
 
 class Application extends Component {
+    static displayName = 'Application';
+
     constructor() {
         super();
         this.state = {

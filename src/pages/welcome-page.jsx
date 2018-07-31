@@ -3,6 +3,8 @@ import { h, render, Component } from 'preact';
 /** @jsx h */
 
 class WelcomePage extends Component {
+    static displayName = 'WelcomePage';
+    
     /**
      * Render the component
      *

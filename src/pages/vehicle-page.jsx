@@ -6,6 +6,8 @@ import Loading from 'widgets/loading';
 /** @jsx h */
 
 class VehiclePage extends AsyncComponent {
+    static displayName = 'VehiclePage';
+
     /**
      * Retrieve remote data and render the synchronize half of this component
      *
@@ -24,15 +26,17 @@ class VehiclePage extends AsyncComponent {
         meanwhile.show(<VehiclePageSync {...props} />);
         props.vehicle = await swapi.fetchOne(`/vehicles/${route.params.id}/`);
         meanwhile.show(<VehiclePageSync {...props} />);
-        props.films = await swapi.fetchMultiple(props.vehicle.films, { partial: 0.5 });
+        props.films = await swapi.fetchMultiple(props.vehicle.films, { partial: 0.4 });
         meanwhile.show(<VehiclePageSync {...props} />);
-        props.pilots = await swapi.fetchMultiple(props.vehicle.pilots, { partial: 0.5 });
+        props.pilots = await swapi.fetchMultiple(props.vehicle.pilots, { partial: 0.4 });
         meanwhile.show(<VehiclePageSync {...props} />);
         return <VehiclePageSync {...props} />;
     }
 }
 
 class VehiclePageSync extends Component {
+    static displayName = 'VehiclePageSync';
+
     /**
      * Render the component, making best effort using what props are given
      *

@@ -6,6 +6,8 @@ import Loading from 'widgets/loading';
 /** @jsx h */
 
 class PlanetList extends AsyncComponent {
+    static displayName = 'PlanetList';
+
     /**
      * Retrieve remote data and render the synchronize half of this component
      *
@@ -27,6 +29,8 @@ class PlanetList extends AsyncComponent {
 }
 
 class PlanetListSync extends Component {
+    static displayName = 'PlanetListSync';
+    
     /**
      * Render the component, making best effort using what props are given
      *

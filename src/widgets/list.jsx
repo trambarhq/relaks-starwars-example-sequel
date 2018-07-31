@@ -24,6 +24,9 @@ function List(props) {
     if (!items) {
         return null;
     }
+    if (items.length === 0) {
+        return <ul className="empty"><li><span>none</span></li></ul>;
+    }
     return (
         <ul>
         {
@@ -45,6 +48,8 @@ function List(props) {
 List.defaultProps = {
     field: 'name'
 };
+
+List.displayName = 'List';
 
 export {
     List as default,

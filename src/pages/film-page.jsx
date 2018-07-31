@@ -6,6 +6,8 @@ import Loading from 'widgets/loading';
 /** @jsx h */
 
 class FilmPage extends AsyncComponent {
+    static displayName = 'FilmPage';
+
     /**
      * Retrieve remote data and render the synchronize half of this component
      *
@@ -17,8 +19,8 @@ class FilmPage extends AsyncComponent {
         let { route, swapi } = this.props;
         let props = {
             film: null,
-            homeworld: null,
-            films: null,
+            characters: null,
+            planets: null,
             species: null,
             vehicles: null,
             starships: null,
@@ -27,21 +29,22 @@ class FilmPage extends AsyncComponent {
         meanwhile.show(<FilmPageSync {...props} />);
         props.film = await swapi.fetchOne(`/films/${route.params.id}/`);
         meanwhile.show(<FilmPageSync {...props} />);
-        props.characters = await swapi.fetchMultiple(props.film.characters, { partial: 0.5 });
+        props.characters = await swapi.fetchMultiple(props.film.characters, { partial: 5 });
         meanwhile.show(<FilmPageSync {...props} />);
-        props.species = await swapi.fetchMultiple(props.film.species, { partial: 0.5 });
+        props.species = await swapi.fetchMultiple(props.film.species, { partial: 0.4 });
         meanwhile.show(<FilmPageSync {...props} />);
         props.planets = await swapi.fetchMultiple(props.film.planets);
         meanwhile.show(<FilmPageSync {...props} />);
-        props.vehicles = await swapi.fetchMultiple(props.film.vehicles, { partial: 0.5 });
+        props.vehicles = await swapi.fetchMultiple(props.film.vehicles, { partial: 0.4 });
         meanwhile.show(<FilmPageSync {...props} />);
-        props.starships = await swapi.fetchMultiple(props.film.starships, { partial: 0.5 });
-        meanwhile.show(<FilmPageSync {...props} />);
+        props.starships = await swapi.fetchMultiple(props.film.starships, { partial: 0.4 });
         return <FilmPageSync {...props} />;
     }
 }
 
 class FilmPageSync extends Component {
+    static displayName = 'FilmPageSync';
+
     /**
      * Render the component, making best effort using what props are given
      *

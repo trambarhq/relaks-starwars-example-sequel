@@ -2,17 +2,17 @@ import { h, Component } from 'preact';
 
 /** @jsx h */
 
-class Loading extends Component {
-    render() {
-        return (
-            <div className="loading">
-                <div>
-                    <i className="fab fa-empire fa-spin"/> Loading
-                </div>
+function Loading() {
+    return (
+        <div className="loading">
+            <div>
+                <i className="fab fa-empire fa-spin"/> Loading
             </div>
-        );
-    }
+        </div>
+    );
 }
+
+Loading.displayName = 'Loading';
 
 export {
     Loading as default,

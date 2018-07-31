@@ -6,6 +6,8 @@ import Loading from 'widgets/loading';
 /** @jsx h */
 
 class VehicleList extends AsyncComponent {
+    static displayName = 'VehicleList';
+
     /**
      * Retrieve remote data and render the synchronize half of this component
      *
@@ -27,6 +29,8 @@ class VehicleList extends AsyncComponent {
 }
 
 class VehicleListSync extends Component {
+    static displayName = 'VehicleListSync';
+
     /**
      * Render the component, making best effort using what props are given
      *

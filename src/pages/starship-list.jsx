@@ -6,6 +6,8 @@ import Loading from 'widgets/loading';
 /** @jsx h */
 
 class StarshipList extends AsyncComponent {
+    static displayName = 'StarshipList';
+
     /**
      * Retrieve remote data and render the synchronize half of this component
      *
@@ -27,6 +29,8 @@ class StarshipList extends AsyncComponent {
 }
 
 class StarshipListSync extends Component {
+    static displayName = 'StarshipListSync';
+
     /**
      * Render the component, making best effort using what props are given
      *

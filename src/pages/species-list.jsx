@@ -6,6 +6,8 @@ import Loading from 'widgets/loading';
 /** @jsx h */
 
 class SpeciesList extends AsyncComponent {
+    static displayName = 'SpeciesList';
+
     /**
      * Retrieve remote data and render the synchronize half of this component
      *
@@ -27,6 +29,8 @@ class SpeciesList extends AsyncComponent {
 }
 
 class SpeciesListSync extends Component {
+    static displayName = 'SpeciesListSync';
+
     /**
      * Render the component, making best effort using what props are given
      *

@@ -6,6 +6,8 @@ import Loading from 'widgets/loading';
 /** @jsx h */
 
 class SpeciesPage extends AsyncComponent {
+    static displayName = 'SpeciesPage';
+
     /**
      * Retrieve remote data and render the synchronize half of this component
      *
@@ -17,25 +19,26 @@ class SpeciesPage extends AsyncComponent {
         let { route, swapi } = this.props;
         let props = {
             species: null,
-            homeworld: null,
             films: null,
             people: null,
+            homeworld: null,
             route: route,
         };
         meanwhile.show(<SpeciesPageSync {...props} />);
         props.species = await swapi.fetchOne(`/species/${route.params.id}/`);
         meanwhile.show(<SpeciesPageSync {...props} />);
-        props.films = await swapi.fetchMultiple(props.species.films, { partial: 0.5 });
+        props.films = await swapi.fetchMultiple(props.species.films, { partial: 0.4 });
         meanwhile.show(<SpeciesPageSync {...props} />);
-        props.people = await swapi.fetchMultiple(props.species.people, { partial: 0.5 });
+        props.people = await swapi.fetchMultiple(props.species.people, { partial: 0.4 });
         meanwhile.show(<SpeciesPageSync {...props} />);
         props.homeworld = await swapi.fetchOne(props.species.homeworld);
-        meanwhile.show(<SpeciesPageSync {...props} />);
         return <SpeciesPageSync {...props} />;
     }
 }
 
 class SpeciesPageSync extends Component {
+    static displayName = 'SpeciesPageSync';
+
     /**
      * Render the component, making best effort using what props are given
      *

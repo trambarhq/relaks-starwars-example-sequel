@@ -6,6 +6,8 @@ import Loading from 'widgets/loading';
 /** @jsx h */
 
 class CharacterPage extends AsyncComponent {
+    static displayName = 'CharacterPage';
+
     /**
      * Retrieve remote data and render the synchronize half of this component
      *
@@ -27,21 +29,23 @@ class CharacterPage extends AsyncComponent {
         meanwhile.show(<CharacterPageSync {...props} />);
         props.person = await swapi.fetchOne(`/people/${route.params.id}/`);
         meanwhile.show(<CharacterPageSync {...props} />);
-        props.films = await swapi.fetchMultiple(props.person.films, { partial: 0.5 });
+        props.films = await swapi.fetchMultiple(props.person.films, { partial: 0.4 });
         meanwhile.show(<CharacterPageSync {...props} />);
-        props.species = await swapi.fetchMultiple(props.person.species, { partial: 0.5 });
+        props.species = await swapi.fetchMultiple(props.person.species, { partial: 0.4 });
         meanwhile.show(<CharacterPageSync {...props} />);
         props.homeworld = await swapi.fetchOne(props.person.homeworld);
         meanwhile.show(<CharacterPageSync {...props} />);
-        props.vehicles = await swapi.fetchMultiple(props.person.vehicles, { partial: 0.5 });
+        props.vehicles = await swapi.fetchMultiple(props.person.vehicles, { partial: 0.4 });
         meanwhile.show(<CharacterPageSync {...props} />);
-        props.starships = await swapi.fetchMultiple(props.person.starships, { partial: 0.5 });
+        props.starships = await swapi.fetchMultiple(props.person.starships, { partial: 0.4 });
         meanwhile.show(<CharacterPageSync {...props} />);
         return <CharacterPageSync {...props} />;
     }
 }
 
 class CharacterPageSync extends Component {
+    static displayName = 'CharacterPageSync';
+
     /**
      * Render the component, making best effort using what props are given
      *
