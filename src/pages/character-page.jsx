@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { AsyncComponent } from 'prelaks';
+import { AsyncComponent } from 'relaks/preact';
 import { List } from 'widgets/list';
 import Loading from 'widgets/loading';
 
