@@ -1,4 +1,4 @@
-import { h, render, Component } from 'preact';
+import { h, Component } from 'preact';
 import DjangoDataSource from 'relaks-django-data-source/preact';
 import RouteManager from 'relaks-route-manager/preact';
 import SWAPI from 'swapi';
@@ -68,6 +68,7 @@ class Application extends Component {
      */
     renderConfiguration() {
         let routeManagerProps = {
+            useHashFallback: true,
             routes: routes,
             onChange: this.handleRouteChange,
         };

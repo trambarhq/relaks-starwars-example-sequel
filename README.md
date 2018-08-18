@@ -1,9 +1,9 @@
-# Prelaks Star Wars Example - the Sequel
+# Relaks Star Wars Example - the Sequel
 
-This is a continuation of the [Prelaks Star Wars Example](https://github.com/chung-leong/prelaks-starwars-example).
-The app is fully built out. Instead of just a character list, all the
-information provided by [https://swapi.co/](https://swapi.co/) can be seen.
-It's a more realistic demonstration of what an app built with
+This is a continuation of the [Relaks Star Wars Example](https://github.com/chung-leong/relaks-starwars-example).
+The app is fully built out. Instead of just the character list, all the
+information provided by [https://swapi.co/](https://swapi.co/) is available.
+It's a more realistic demonstration of what an app built using [Preact](https://preactjs.com/) and
 [Relaks](https://github.com/chung-leong/relaks) would work.
 
 You can see the app in action [here](https://trambar.io/examples/starwars-v/).
@@ -12,6 +12,13 @@ When gzipped, it's just under 15 KB.
 
 The example makes use of [relaks-route-manager](https://github.com/chung-leong/relaks-route-manager)
 and [relaks-django-data-source](https://github.com/chung-leong/relaks-django-data-source).
+
+## Getting started
+
+To see the code running in debug mode, first clone this repository. In the
+working folder, run `npm install`. Once that's done, run `npm run start` to
+launch [WebPack Dev Server](https://webpack.js.org/configuration/dev-server/).
+Open a browser window and enter `http://localhost:8080` as the location.
 
 ## Application structure
 

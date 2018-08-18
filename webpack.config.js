@@ -19,7 +19,8 @@ module.exports = {
     },
     resolve: {
         extensions: [ '.js', '.jsx' ],
-        modules: [ Path.resolve('./src'), Path.resolve('./node_modules') ]
+        modules: [ Path.resolve('./src'), Path.resolve('./node_modules') ],
+        symlinks: false,
     },
     module: {
         rules: [
@@ -73,7 +74,7 @@ module.exports = {
             reportFilename: `report.html`,
         }),
     ],
-    devtool: (event === 'build') ? 'inline-source-map' : false,
+    devtool: (event === 'build') ? false : 'inline-source-map',
     devServer: {
         inline: true,
         historyApiFallback: {
