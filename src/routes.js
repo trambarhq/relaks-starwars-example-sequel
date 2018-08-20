@@ -41,7 +41,7 @@ let routes = {
     },
     'film-summary': {
         path: '/films/${id}/',
-        parameters: { id: Number },
+        params: { id: Number },
         load: async (params) => {
             params.module = await import('pages/film-page' /* webpackChunkName: "film-page" */);
         }
@@ -54,7 +54,7 @@ let routes = {
     },
     'character-summary': {
         path: '/characters/${id}/',
-        parameters: { id: Number },
+        params: { id: Number },
         load: async (params) => {
             params.module = await import('pages/character-page' /* webpackChunkName: "character-page" */);
         }
@@ -67,7 +67,7 @@ let routes = {
     },
     'planet-summary': {
         path: '/planets/${id}/',
-        parameters: { id: Number },
+        params: { id: Number },
         load: async (params) => {
             params.module = await import('pages/planet-page' /* webpackChunkName: "planet-page" */);
         }
@@ -80,7 +80,7 @@ let routes = {
     },
     'species-summary': {
         path: '/species/${id}/',
-        parameters: { id: Number },
+        params: { id: Number },
         load: async (params) => {
             params.module = await import('pages/species-page' /* webpackChunkName: "species-page" */);
         }
@@ -93,7 +93,7 @@ let routes = {
     },
     'vehicle-summary': {
         path: '/vehicles/${id}/',
-        parameters: { id: Number },
+        params: { id: Number },
         load: async (params) => {
             params.module = await import('pages/vehicle-page' /* webpackChunkName: "vehicle-page" */);
         }
@@ -106,7 +106,7 @@ let routes = {
     },
     'starship-summary': {
         path: '/starship/${id}/',
-        parameters: { id: Number },
+        params: { id: Number },
         load: async (params) => {
             params.module = await import('pages/starship-page' /* webpackChunkName: "starship-page" */);
         }

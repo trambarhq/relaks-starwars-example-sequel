@@ -75,6 +75,7 @@ source:
 ```js
 renderConfiguration() {
     let routeManagerProps = {
+        useHashFallback: (process.env.NODE_ENV === 'production'),
         routes: routes,
         onChange: this.handleRouteChange,
     };
@@ -89,6 +90,10 @@ renderConfiguration() {
     );
 }
 ```
+
+Hash fallback mode is used for the production version, so that the app will work
+properly when loaded as a file ([pushState()](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
+does not work at a file:// location). It also make hosting the example easier.
 
 ## Routing
 

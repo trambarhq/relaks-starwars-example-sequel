@@ -68,7 +68,7 @@ class Application extends Component {
      */
     renderConfiguration() {
         let routeManagerProps = {
-            useHashFallback: true,
+            useHashFallback: (process.env.NODE_ENV === 'production'),
             routes: routes,
             onChange: this.handleRouteChange,
         };
