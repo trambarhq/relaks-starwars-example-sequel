@@ -3,6 +3,7 @@ class Route {
         this.routeManager = routeManager;
         this.name = routeManager.state.name;
         this.params = routeManager.state.params;
+        this.history = routeManager.state.history;
     }
 
     change(url, options) {
