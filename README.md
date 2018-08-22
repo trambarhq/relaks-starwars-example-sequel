@@ -30,8 +30,8 @@ has change from the previous example. It calls `renderUserInterfacer()` and
 render() {
     return (
         <div>
-            {this.renderUserInterface()}
             {this.renderConfiguration()}
+            {this.renderUserInterface()}
         </div>
     );
 }
