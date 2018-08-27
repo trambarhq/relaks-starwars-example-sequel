@@ -80,6 +80,7 @@ renderConfiguration() {
         onChange: this.handleRouteChange,
     };
     let dataSourceProps = {
+        baseURL: 'https://swapi.co/api',
         onChange: this.handleDataSourceChange,
     };
     return (

@@ -12,8 +12,8 @@ function List(props) {
                 items = [ { url: urls, pending: true } ];
             }
         } else if (urls instanceof Array) {
-            items = urls.map((url) => {
-                var item = (items) ? items[url] : null;
+            items = urls.map((url, index) => {
+                var item = (items) ? items[index] : null;
                 if (!item) {
                     item = { url, pending: true };
                 }

@@ -1,8 +1,6 @@
 import { h, Component } from 'preact';
-import DjangoDataSource from 'relaks-django-data-source/preact';
-import RouteManager from 'relaks-route-manager/preact';
 import SWAPI from 'swapi';
-import { Route, routes } from 'routes';
+import { Route } from 'routes';
 import NavBar from 'widgets/nav-bar';
 import 'relaks/preact';
 import 'style.scss';
@@ -12,11 +10,12 @@ import 'style.scss';
 class Application extends Component {
     static displayName = 'Application';
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        let { routeManager, dataSource } = this.props;
         this.state = {
-            route: null,
-            swapi: null,
+            route: new Route(routeManager),
+            swapi: new SWAPI(dataSource),
         };
     }
 
@@ -26,24 +25,7 @@ class Application extends Component {
      * @return {VNode}
      */
     render() {
-        return (
-            <div>
-                {this.renderConfiguration()}
-                {this.renderUserInterface()}
-            </div>
-        );
-    }
-
-    /**
-     * Render the user interface
-     *
-     * @return {VNode|null}
-     */
-    renderUserInterface() {
         let { route, swapi } = this.state;
-        if (!swapi || !route) {
-            return null;
-        }
         let module = route.params.module;
         let page;
         if (module) {
@@ -62,31 +44,27 @@ class Application extends Component {
     }
 
     /**
-     * Render non-visual components
-     *
-     * @return {VNode}
+     * Added change handlers when component mounts
      */
-    renderConfiguration() {
-        let routeManagerProps = {
-            useHashFallback: (process.env.NODE_ENV === 'production'),
-            routes: routes,
-            onChange: this.handleRouteChange,
-        };
-        let dataSourceProps = {
-            onChange: this.handleDataSourceChange,
-        };
-        return (
-            <div>
-                <RouteManager {...routeManagerProps} />
-                <DjangoDataSource {...dataSourceProps} />
-            </div>
-        );
+    componentDidMount() {
+        let { routeManager, dataSource } = this.props;
+        routeManager.addEventListener('change', this.handleRouteChange);
+        dataSource.addEventListener('change', this.handleDataSourceChange);
+    }
+
+    /**
+     * Remove change handlers when component mounts
+     */
+    componentWillUnmount() {
+        let { routeManager, dataSource } = this.props;
+        routeManager.removeEventListener('change', this.handleRouteChange);
+        dataSource.removeEventListener('change', this.handleDataSourceChange);
     }
 
     /**
      * Called when the data source changes
      *
-     * @param  {Object} evt
+     * @param  {RelaksDjangoDataSourceEvent} evt
      */
     handleDataSourceChange = (evt) => {
         this.setState({ swapi: new SWAPI(evt.target) });
@@ -95,7 +73,7 @@ class Application extends Component {
     /**
      * Called when the route changes
      *
-     * @param  {Object} evt
+     * @param  {RelaksRouteManagerEvent} evt
      */
     handleRouteChange = (evt) => {
         this.setState({ route: new Route(evt.target) });

@@ -1,9 +1,9 @@
 class Route {
     constructor(routeManager) {
         this.routeManager = routeManager;
-        this.name = routeManager.state.name;
-        this.params = routeManager.state.params;
-        this.history = routeManager.state.history;
+        this.name = routeManager.name;
+        this.params = routeManager.params;
+        this.history = routeManager.history;
     }
 
     change(url, options) {
