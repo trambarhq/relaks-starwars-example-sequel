@@ -1,7 +1,7 @@
 import 'preact/devtools';
 import { h, render } from 'preact';
 import { Application } from 'application';
-import { routes } from 'routes';
+import { routes } from 'routing';
 import DjangoDataSource from 'relaks-django-data-source';
 import RouteManager from 'relaks-route-manager';
 
@@ -10,14 +10,15 @@ async function initialize(evt) {
     let dataSource = new DjangoDataSource({
         baseURL: 'https://swapi.co/api',
     });
-    await dataSource.initialize();
+    dataSource.activate();
 
     // create route manager
     let routeManager = new RouteManager({
         useHashFallback: (process.env.NODE_ENV === 'production'),
         routes,
     });
-    await routeManager.initialize();
+    routeManager.activate();
+    await routeManager.start();
 
     let appContainer = document.getElementById('app-container');
     if (!appContainer) {
