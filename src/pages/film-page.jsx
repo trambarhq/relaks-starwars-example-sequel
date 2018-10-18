@@ -29,7 +29,7 @@ class FilmPage extends AsyncComponent {
         meanwhile.show(<FilmPageSync {...props} />);
         props.film = await swapi.fetchOne(`/films/${route.params.id}/`);
         meanwhile.show(<FilmPageSync {...props} />);
-        props.characters = await swapi.fetchMultiple(props.film.characters, { partial: 5 });
+        props.characters = await swapi.fetchMultiple(props.film.characters, { minimum: 5 });
         meanwhile.show(<FilmPageSync {...props} />);
         props.species = await swapi.fetchMultiple(props.film.species, { minimum: '60%' });
         meanwhile.show(<FilmPageSync {...props} />);
