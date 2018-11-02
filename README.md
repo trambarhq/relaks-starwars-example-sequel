@@ -1,51 +1,61 @@
-# Relaks Star Wars Example - the Sequel
+Relaks Star Wars Example - the Sequel
+-------------------------------------
+This is a continuation of the [Relaks Star Wars Example](https://github.com/chung-leong/relaks-starwars-example). The app is now fully built out. Instead of just the character list, all the information provided by [https://swapi.co/](https://swapi.co/) is available. It's also properly integrated with the browser's history functionality. It's a more realistic demonstration of what an app built using [Preact](https://preactjs.com/) and [Relaks](https://github.com/chung-leong/relaks) would work.
 
-This is a continuation of the [Relaks Star Wars Example](https://github.com/chung-leong/relaks-starwars-example).
-The app is fully built out. Instead of just the character list, all the
-information provided by [https://swapi.co/](https://swapi.co/) is available.
-It's a more realistic demonstration of what an app built using [Preact](https://preactjs.com/) and
-[Relaks](https://github.com/chung-leong/relaks) would work.
+You can see the app in action [here](https://trambar.io/examples/starwars-v/). You can view its WebPack bundle analysis [here](https://trambar.io/examples/starwars-v/report.html).
+When gzipped, it's just around 30 KB.
 
-You can see the app in action [here](https://trambar.io/examples/starwars-v/).
-You can view its WebPack bundle analysis [here](https://trambar.io/examples/starwars-v/report.html).
-When gzipped, it's just under 15 KB.
+The example makes use of [relaks-route-manager](https://github.com/chung-leong/relaks-route-manager) and [relaks-django-data-source](https://github.com/chung-leong/relaks-django-data-source).
 
-The example makes use of [relaks-route-manager](https://github.com/chung-leong/relaks-route-manager)
-and [relaks-django-data-source](https://github.com/chung-leong/relaks-django-data-source).
+* [Getting started](#getting-started)
+* [Application](#application)
+* [Routing](#routing)
+* [Character list](#character-list)
+* [Character page](#character-page)
+* [Next step](#next-step)
 
 ## Getting started
 
-To see the code running in debug mode, first clone this repository. In the
-working folder, run `npm install`. Once that's done, run `npm run start` to
-launch [WebPack Dev Server](https://webpack.js.org/configuration/dev-server/).
-Open a browser window and enter `http://localhost:8080` as the location.
+To see the code running in debug mode, first clone this repository. In the working folder, run `npm install`. Once that's done, run `npm run start` to launch [WebPack Dev Server](https://webpack.js.org/configuration/dev-server/). Open a browser window and enter `http://localhost:8080` as the location.
 
-## Application structure
+## Application
 
-The `render()` method of **Application** ([application.jsx](https://github.com/chung-leong/relaks-starwars-example-sequel/blob/master/src/application.jsx#L28))
-has change from the previous example. It calls `renderUserInterfacer()` and
-`renderConfiguration()`:
+The `initialize()` function ([main.js](https://github.com/chung-leong/relaks-starwars-example-sequel/blob/master/src/main.js)) has changed slightly. The function has to be declared as `async`, since we need to use the `await` operator. It initializes a second object, `RouteManager`. The route manager maps the URL displayed in the browser's location bar to pages in the app. It'll intercept clicks on hyperlinks and handle them internally.
 
-```js
-render() {
-    return (
-        <div>
-            {this.renderConfiguration()}
-            {this.renderUserInterface()}
-        </div>
-    );
+```javascript
+async function initialize(evt) {
+    // create data source
+    let dataSource = new DjangoDataSource({
+        baseURL: 'https://swapi.co/api',
+    });
+    dataSource.activate();
+
+    // create route manager
+    let routeManager = new RouteManager({
+        useHashFallback: (process.env.NODE_ENV === 'production'),
+        routes,
+    });
+    routeManager.activate();
+    await routeManager.start();
+
+    let appContainer = document.getElementById('app-container');
+    if (!appContainer) {
+        throw new Error('Unable to find app element in DOM');
+    }
+    let appElement = h(Application, { dataSource, routeManager });
+    render(appElement, appContainer);
 }
 ```
 
-`renderUserInterface()` has changed quite a bit. The app now has a nav bar. It's
+We'll using hash fallback mode for the production version, so that the app will work properly when loaded as a file ([pushState()](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
+does not work at a file:// location). It also make hosting the example easier.
+
+The `render()` method of `Application` ([application.jsx](https://github.com/chung-leong/relaks-starwars-example-sequel/blob/master/src/application.jsx)) has changed quite a bit. The app now has a nav bar. It's
 also using a router to determine which page to render:
 
-```js
-renderUserInterface() {
+```javascript
+render() {
     let { route, swapi } = this.state;
-    if (!swapi || !route) {
-        return null;
-    }
     let module = route.params.module;
     let page;
     if (module) {
@@ -64,110 +74,148 @@ renderUserInterface() {
 }
 ```
 
-In addition to route parameters extracted from the current URL, the route object
-contains a reference to the module used to generate the page. When `require()`
-or `import()` is used to import a JavaScript module, the default export isn't
-picked automatically. We have the explicitly ask for `.default`.
-
-`renderConfiguration()` renders the router manager in addition to the data
-source:
-
-```js
-renderConfiguration() {
-    let routeManagerProps = {
-        useHashFallback: (process.env.NODE_ENV === 'production'),
-        routes: routes,
-        onChange: this.handleRouteChange,
-    };
-    let dataSourceProps = {
-        baseURL: 'https://swapi.co/api',
-        onChange: this.handleDataSourceChange,
-    };
-    return (
-        <div>
-            <RouteManager {...routeManagerProps} />
-            <DjangoDataSource {...dataSourceProps} />
-        </div>
-    );
-}
-```
-
-Hash fallback mode is used for the production version, so that the app will work
-properly when loaded as a file ([pushState()](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
-does not work at a file:// location). It also make hosting the example easier.
+In addition to route parameters extracted from the current URL, the route object contains a reference to the module used to generate the page. We have to explicitly ask for the `default` export here, because it isn't picked automatically when `require()` or `import()` is used to import a JavaScript module.
 
 ## Routing
 
-Route definitions for the app's various pages are contained in
-[routes.js](https://github.com/chung-leong/relaks-starwars-example-sequel/blob/master/src/routes.js).
-The file also contains the proxy object for the route manager.
+Route definitions for the app's various pages are contained in [routing.js](https://github.com/chung-leong/relaks-starwars-example-sequel/blob/master/src/routing.js). The file also contains the proxy object for the route manager.
 
 The following is one of the routes:
 
 ```js
 'film-summary': {
     path: '/films/${id}/',
-    parameters: { id: Number },
-    load: async (params) => {
-        params.module = await import('pages/film-page' /* webpackChunkName: "film-page" */);
+    params: { id: Number },
+    load: async (match) => {
+        match.params.module = await import('pages/film-page' /* webpackChunkName: "film-page" */);
     }
-}
+},
 ```
 
-`path` is the pattern of matching URLs. It uses the syntax of ES6 variable
-interpolation.
+`path` is the pattern of matching URLs. It uses the syntax of ES6 variable interpolation.
 
-`parameters` controls the typecasting of extracted parameters. In
-this case we want id to be a number.
+`params` controls the typecasting of extracted parameters. In this case we want `id` to be a number.
 
-`load` is an async function that loads the module for the page. The module is
-placed into `params.module`, which is referenced by `renderUserInterface()` of
-**Application**.
+`load` is an async function that loads the module for the page. The module is placed into `match.params.module`, which is referenced by `render()` of `Application`.
 
-The *webpackChunkName* comment assigns a name to the code chunk holding the
-module. The name forms part of the name of the resultant JavaScript file.
-Without it the file would end up with an unintuitive numeric name.
+The *webpackChunkName* comment assigns a name to the code chunk holding the module. The name forms part of the name of the resultant JavaScript file. Without it the file would end up with an unintuitive numeric name.
 
-## Character Page
+## Character list
 
-The `renderAsync()` method of **CharacterPage** is largely the same as before.
-The only difference is that we no longer receive `person` as a prop. We have
-to fetch it, using the id from the route.
+The `renderAsync()` method of `CharacterList` is largely the same as before. The only difference is `route` is now passed to to `CharacterListSync` (instead of a callback function).
 
-```js
+```javascript
 async renderAsync(meanwhile) {
     let { route, swapi } = this.props;
     let props = {
-        person: null,
-        homeworld: null,
-        films: null,
-        species: null,
-        vehicles: null,
-        starships: null,
+        route,
+    };
+    meanwhile.show(<CharacterListSync {...props} />);
+    props.people = await swapi.fetchList('/people/');
+    props.people.more();
+    return <CharacterListSync {...props} />;
+}
+```
+
+The `render()` method of `CharacterListSync` has been refactored so that it uses a reusable component to draw the list:
+
+```javascript
+render() {
+    let { people, route } = this.props;
+    if (!people) {
+        return <Loading />;
+    }
+    let listProps = {
+        items: people,
+        field: 'name',
+        pageName: 'character-summary',
+        route: route,
+    };
+    return (
+        <div>
+            <h1>Characters</h1>
+            <List {...listProps} />
+        </div>
+    );
+}
+```
+
+`List` is a stateless component that draw a list of items:
+
+```javascript
+function List(props) {
+    let { route, urls, items, field, pageName } = props;
+    if (urls) {
+        // accept single URL and object
+        if (typeof(urls) === 'string') {
+            urls = [ urls ];
+            items = [ items ];
+        }
+        items = urls.map((url, index) => {
+            var item = (items) ? items[index] : null;
+            if (!item) {
+                item = { url, pending: true };
+            }
+            return item;
+        });
+    }
+    if (!items) {
+        return null;
+    }
+    if (items.length === 0) {
+        return <ul className="empty"><li><span>none</span></li></ul>;
+    }
+    return (
+        <ul>
+        {
+            items.map((item) => {
+                let id = route.extractID(item.url);
+                let url = route.find(pageName, { id });
+                let text = item.pending ? '...' : item[field];
+                let linkProps = {
+                    href: url,
+                    className: (item.pending) ? 'pending' : undefined,
+                };
+                return <li><a {...linkProps}>{text}</a></li>;
+            })
+        }
+        </ul>
+    );
+}
+```
+
+The `find()` method of `route` is used to generate a URL to the summary page of an item. `pageName` corresponds to the key of the desired route in the routing table ([routing.js](https://github.com/chung-leong/relaks-starwars-example-sequel/blob/master/src/routing.js)).
+
+## Character page
+
+The `renderAsync()` method of `CharacterPage` is also largely unchanged. Insteading of receiving `person` as a prop, it's now necessary to fetch the object, using the id from the route.
+
+```javascript
+async renderAsync(meanwhile) {
+    let { route, swapi } = this.props;
+    let props = {
         route: route,
     };
     meanwhile.show(<CharacterPageSync {...props} />);
     props.person = await swapi.fetchOne(`/people/${route.params.id}/`);
     meanwhile.show(<CharacterPageSync {...props} />);
-    props.films = await swapi.fetchMultiple(props.person.films, { partial: 0.4 });
+    props.films = await swapi.fetchMultiple(props.person.films, { minimum: '60%' });
     meanwhile.show(<CharacterPageSync {...props} />);
-    props.species = await swapi.fetchMultiple(props.person.species, { partial: 0.4 });
+    props.species = await swapi.fetchMultiple(props.person.species, { minimum: '60%' });
     meanwhile.show(<CharacterPageSync {...props} />);
     props.homeworld = await swapi.fetchOne(props.person.homeworld);
     meanwhile.show(<CharacterPageSync {...props} />);
-    props.vehicles = await swapi.fetchMultiple(props.person.vehicles, { partial: 0.4 });
+    props.vehicles = await swapi.fetchMultiple(props.person.vehicles, { minimum: '60%' });
     meanwhile.show(<CharacterPageSync {...props} />);
-    props.starships = await swapi.fetchMultiple(props.person.starships, { partial: 0.4 });
+    props.starships = await swapi.fetchMultiple(props.person.starships, { minimum: '60%' });
     meanwhile.show(<CharacterPageSync {...props} />);
     return <CharacterPageSync {...props} />;
 }
 ```
 
-The `render()` method of **CharacterPageSync** is also largely the same.
-Redundant code for drawing lists was refactored into a separate component.
-The method also returns a loading animation when `person` is null.
+The `render()` method of `CharacterPageSync` is also largely the same. Redundant code for drawing lists was refactored out. The method also returns a loading animation when `person` is `undefined`.
 
-```js
+```javascript
 render() {
     let { route, person, homeworld, films, species, vehicles, starships } = this.props;
     if (!person) {
@@ -197,3 +245,7 @@ render() {
     );
 }
 ```
+
+## Next step
+
+In the [next example](https://github.com/chung-leong/relaks-starwars-example-isomorphic), we'll make our app isomorphic. It'll render on both the client side and the server side (for the purpose of SEO among other things).
