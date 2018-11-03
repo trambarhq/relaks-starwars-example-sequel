@@ -44,7 +44,7 @@ class CharacterListSync extends Component {
             items: people,
             field: 'name',
             pageName: 'character-summary',
-            route: route,
+            route,
         };
         return (
             <div>
