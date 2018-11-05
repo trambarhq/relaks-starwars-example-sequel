@@ -6,7 +6,7 @@ import DjangoDataSource from 'relaks-django-data-source';
 import RouteManager from 'relaks-route-manager';
 
 async function initialize(evt) {
-    // create data source
+    // create remote data source
     let dataSource = new DjangoDataSource({
         baseURL: 'https://swapi.co/api',
     });
