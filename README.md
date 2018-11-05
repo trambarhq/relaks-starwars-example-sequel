@@ -56,18 +56,12 @@ also using a router to determine which page to render:
 ```javascript
 render() {
     let { route, swapi } = this.state;
-    let module = route.params.module;
-    let page;
-    if (module) {
-        let Component = module.default;
-        let props = { route, swapi };
-        page = <Component {...props} />;
-    }
+    let PageComponent = route.params.module.default;
     return (
         <div>
             <NavBar route={route} />
             <div className="contents">
-                {page}
+                <PageComponent route={route} swapi={swapi} />
             </div>
         </div>
     );
@@ -102,7 +96,7 @@ The *webpackChunkName* comment assigns a name to the code chunk holding the modu
 
 ## Character list
 
-The `renderAsync()` method of `CharacterList` is largely the same as before. The only difference is `route` is now passed to to `CharacterListSync` (instead of a callback function).
+The `renderAsync()` method of `CharacterList` ([character-list.jsx](https://github.com/chung-leong/relaks-starwars-example-isomorphic/blob/master/src/pages/character-list.jsx)) is largely the same as before. The only difference is `route` is now passed to to `CharacterListSync` (instead of the callback function `onSelect`).
 
 ```javascript
 async renderAsync(meanwhile) {
@@ -140,7 +134,7 @@ render() {
 }
 ```
 
-`List` is a stateless component that draw a list of items:
+`List` ([list.jsx](https://github.com/chung-leong/relaks-starwars-example-isomorphic/blob/master/src/widgets/list.jsx)) is a stateless component that draw a list of items:
 
 ```javascript
 function List(props) {
@@ -188,7 +182,7 @@ The `find()` method of `route` is used to generate a URL to the summary page of 
 
 ## Character page
 
-The `renderAsync()` method of `CharacterPage` is also largely unchanged. Insteading of receiving `person` as a prop, it's now necessary to fetch the object, using the id from the route.
+The `renderAsync()` method of `CharacterPage` ([character-page.jsx](https://github.com/chung-leong/relaks-starwars-example-isomorphic/blob/master/src/pages/character-page.jsx)) is also largely unchanged. Insteading of receiving `person` as a prop, it's now necessary to fetch the object, using the id from the route.
 
 ```javascript
 async renderAsync(meanwhile) {
@@ -213,7 +207,7 @@ async renderAsync(meanwhile) {
 }
 ```
 
-The `render()` method of `CharacterPageSync` is also largely the same. Redundant code for drawing lists was refactored out. The method also returns a loading animation when `person` is `undefined`.
+The `render()` method of `CharacterPageSync` ([character-page.jsx](https://github.com/chung-leong/relaks-starwars-example-isomorphic/blob/master/src/pages/character-page.jsx)) is also largely the same. Redundant code for drawing lists was refactored out. The method also returns a loading animation when `person` is `undefined`.
 
 ```javascript
 render() {
