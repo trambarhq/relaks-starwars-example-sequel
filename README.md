@@ -148,7 +148,7 @@ function List(props) {
             items = [ items ];
         }
         items = urls.map((url, index) => {
-            var item = (items) ? items[index] : null;
+            let item = (items) ? items[index] : null;
             if (!item) {
                 item = { url, pending: true };
             }
