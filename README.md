@@ -14,6 +14,7 @@ The example makes use of [relaks-route-manager](https://github.com/chung-leong/r
 * [Routing](#routing)
 * [Character list](#character-list)
 * [Character page](#character-page)
+* [Other pages](#other-pages)
 * [Next step](#next-step)
 
 ## Getting started
@@ -147,6 +148,7 @@ function List(props) {
             urls = [ urls ];
             items = [ items ];
         }
+        // deal with holes in the data set
         items = urls.map((url, index) => {
             let item = (items) ? items[index] : null;
             if (!item) {
@@ -184,7 +186,7 @@ The `find()` method of `route` is used to generate a URL to the summary page of 
 
 ## Character page
 
-The `renderAsync()` method of `CharacterPage` ([character-page.jsx](https://github.com/chung-leong/relaks-starwars-example-isomorphic/blob/master/src/pages/character-page.jsx)) is also largely unchanged. Insteading of receiving `person` as a prop, it's now necessary to fetch the object, using the id from the route.
+The `renderAsync()` method of `CharacterPage` ([character-page.jsx](https://github.com/chung-leong/relaks-starwars-example-sequal/blob/master/src/pages/character-page.jsx)) is also largely unchanged. Instead of receiving `person` as a prop, it's now necessary to fetch the object, using the id from the route.
 
 ```javascript
 async renderAsync(meanwhile) {
@@ -209,7 +211,7 @@ async renderAsync(meanwhile) {
 }
 ```
 
-The `render()` method of `CharacterPageSync` ([character-page.jsx](https://github.com/chung-leong/relaks-starwars-example-isomorphic/blob/master/src/pages/character-page.jsx)) is also largely the same. Redundant code for drawing lists was refactored out. The method also returns a loading animation when `person` is `undefined`.
+The `render()` method of `CharacterPageSync` ([character-page.jsx](https://github.com/chung-leong/relaks-starwars-example-sequal/blob/master/src/pages/character-page.jsx)) is also largely the same. Redundant code for drawing lists was refactored out. The method also returns a loading animation when `person` is `undefined`.
 
 ```javascript
 render() {
@@ -241,6 +243,10 @@ render() {
     );
 }
 ```
+
+## Other pages
+
+The other pages are all just copy-and-paste variants of the code described above.
 
 ## Next step
 
