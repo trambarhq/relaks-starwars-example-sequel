@@ -246,7 +246,7 @@ render() {
 
 ## Other pages
 
-The other pages are all just copy-and-paste variants of the code described above.
+The [other pages](https://github.com/chung-leong/relaks-starwars-example-isomorphic/tree/master/src/pages) are all just copy-and-paste variants of the code described above.
 
 ## Next step
 
