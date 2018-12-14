@@ -15,7 +15,6 @@ The example makes use of [relaks-route-manager](https://github.com/trambarhq/rel
 * [Character list](#character-list)
 * [Character page](#character-page)
 * [Other pages](#other-pages)
-* [Next step](#next-step)
 
 ## Getting started
 
@@ -247,7 +246,3 @@ render() {
 ## Other pages
 
 The [other pages](https://github.com/trambarhq/relaks-starwars-example-isomorphic/tree/master/src/pages) are all just copy-and-paste variants of the code described above.
-
-## Next step
-
-In the [next example](https://github.com/trambarhq/relaks-starwars-example-isomorphic), we'll make our app isomorphic. It'll render on both the client side and the server side (for the purpose of SEO among other things).
