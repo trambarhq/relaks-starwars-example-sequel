@@ -5,7 +5,7 @@ This is a continuation of the [Relaks Star Wars Example](https://github.com/tram
 You can see the app in action [here](https://trambar.io/examples/starwars-v/). You can view its WebPack bundle analysis [here](https://trambar.io/examples/starwars-v/report.html).
 When gzipped, it's just around 30 KB.
 
-![Screenshot](docs/img/screenshot.png)
+[![Screenshot](docs/img/screenshot.png)](https://trambar.io/examples/starwars-v/)
 
 The example makes use of [relaks-route-manager](https://github.com/trambarhq/relaks-route-manager) and [relaks-django-data-source](https://github.com/trambarhq/relaks-django-data-source).
 
