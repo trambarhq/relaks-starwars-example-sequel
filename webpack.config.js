@@ -2,15 +2,13 @@ var FS = require('fs');
 var Path = require('path');
 var Webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var DefinePlugin = Webpack.DefinePlugin;
 var NamedChunksPlugin = Webpack.NamedChunksPlugin;
-var NamedModulesPlugin = Webpack.NamedModulesPlugin;
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 var event = process.env.npm_lifecycle_event;
 
 module.exports = {
+    mode: (event === 'build') ? 'production' : 'development',
     context: Path.resolve('./src'),
     entry: './main',
     output: {
@@ -54,7 +52,6 @@ module.exports = {
     },
     plugins: [
         new NamedChunksPlugin,
-        new NamedModulesPlugin,
         new HtmlWebpackPlugin({
             template: Path.resolve(`./src/index.html`),
             filename: Path.resolve(`./www/index.html`),
@@ -64,7 +61,6 @@ module.exports = {
             reportFilename: `report.html`,
         }),
     ],
-    devtool: (event === 'build') ? false : 'inline-source-map',
     devServer: {
         inline: true,
         historyApiFallback: {
@@ -79,27 +75,6 @@ module.exports = {
         }
     }
 };
-
-var constants = {};
-if (event === 'build') {
-    console.log('Optimizing JS code');
-
-    // set NODE_ENV to production
-    var plugins = module.exports.plugins;
-    var constants = {
-        'process.env.NODE_ENV': '"production"',
-    };
-    plugins.unshift(new DefinePlugin(constants));
-
-    // use Uglify to remove dead-code
-    plugins.unshift(new UglifyJSPlugin({
-        uglifyOptions: {
-            compress: {
-              drop_console: true,
-            }
-        }
-    }));
-}
 
 // copy webpack.resolve.js into webpack.debug.js to resolve Babel presets
 // and plugins to absolute paths, required when linked modules are used
