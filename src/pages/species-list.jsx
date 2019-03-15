@@ -1,61 +1,38 @@
-import { h, Component } from 'preact';
-import { AsyncComponent } from 'relaks/preact';
+import React from 'react';
+import Relaks, { useProgress } from 'relaks/hooks';
 import List from 'widgets/list';
 import Loading from 'widgets/loading';
 
-/** @jsx h */
+async function SpeciesList(props) {
+    const { route, swapi } = props;
+    const [ show ] = useProgress();
 
-class SpeciesList extends AsyncComponent {
-    static displayName = 'SpeciesList';
+    render();
+    const species = await swapi.fetchList('/species/');
+    render();
 
-    /**
-     * Retrieve remote data and render the synchronize half of this component
-     *
-     * @param  {Meanwhile}  meanwhile
-     *
-     * @return {VNode}
-     */
-    async renderAsync(meanwhile) {
-        let { route, swapi } = this.props;
-        let props = {
-            route,
-        };
-        meanwhile.show(<SpeciesListSync {...props} />);
-        props.species = await swapi.fetchList('/species/');
-        props.species.more();
-        return <SpeciesListSync {...props} />;
-    }
-}
+    species.more();
 
-class SpeciesListSync extends Component {
-    static displayName = 'SpeciesListSync';
-
-    /**
-     * Render the component, making best effort using what props are given
-     *
-     * @return {VNode}
-     */
-    render() {
-        let { species, route } = this.props;
+    function render() {
         if (!species) {
-            return <Loading />;
+            show(<Loading />);
+        } else {
+            show(
+                <div>
+                    <h1>Species</h1>
+                    <List items={species} field="name" pageName="species-summary" route={route} />
+                </div>
+            );
         }
-        let listProps = {
-            items: species,
-            pageName: 'species-summary',
-            route,
-        };
-        return (
-            <div>
-                <h1>Species</h1>
-                <List {...listProps} />
-            </div>
-        );
     }
 }
+
+// set display name so it appears in React Dev Console when code is uglified
+SpeciesList.displayName = 'SpeciesList';
+
+const asyncComponent = Relaks(SpeciesList);
 
 export {
-    SpeciesList as default,
-    SpeciesList,
-    SpeciesListSync
+    asyncComponent as default,
+    asyncComponent as SpeciesList,
 };

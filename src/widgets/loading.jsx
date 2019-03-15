@@ -1,6 +1,4 @@
-import { h, Component } from 'preact';
-
-/** @jsx h */
+import React, { Component } from 'react';
 
 function Loading() {
     return (
@@ -12,6 +10,7 @@ function Loading() {
     );
 }
 
+// set display name so it appears in React Dev Console when code is uglified
 Loading.displayName = 'Loading';
 
 export {

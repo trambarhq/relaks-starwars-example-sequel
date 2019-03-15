@@ -34,7 +34,6 @@ module.exports = {
                     ],
                     plugins: [
                         'syntax-async-functions',
-                        'syntax-class-properties',
                         'transform-regenerator',
                         'transform-runtime',
                     ]

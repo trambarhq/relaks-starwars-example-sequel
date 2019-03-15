@@ -1,23 +1,15 @@
-import { h, render, Component } from 'preact';
+import React, { Component } from 'react';
 
-/** @jsx h */
-
-class WelcomePage extends Component {
-    static displayName = 'WelcomePage';
-    
-    /**
-     * Render the component
-     *
-     * @return {VNode}
-     */
-    render() {
-        return (
-            <div>
-                <h1>Welcome!</h1>
-            </div>
-        );
-    }
+function WelcomePage(props) {
+    return (
+        <div>
+            <h1>Welcome!</h1>
+        </div>
+    );
 }
+
+// set display name so it appears in React Dev Console when code is uglified
+WelcomePage.displayName = 'WelcomePage';
 
 export {
     WelcomePage as default,

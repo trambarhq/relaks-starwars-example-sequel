@@ -1,6 +1,4 @@
-import { h, Component } from 'preact';
-
-/** @jsx h */
+import React, { Component } from 'react';
 
 function List(props) {
     let { route, urls, items, field, pageName } = props;
@@ -25,28 +23,25 @@ function List(props) {
     if (items.length === 0) {
         return <ul className="empty"><li><span>none</span></li></ul>;
     }
-    return (
-        <ul>
-        {
-            items.map((item) => {
-                let id = route.extractID(item.url);
-                let url = route.find(pageName, { id });
-                let text = item.pending ? '...' : item[field];
-                let linkProps = {
-                    href: url,
-                    className: (item.pending) ? 'pending' : undefined,
-                };
-                return <li><a {...linkProps}>{text}</a></li>;
-            })
-        }
-        </ul>
-    );
+    return <ul>{items.map(renderItem)}</ul>;
+
+    function renderItem(item, i) {
+        const id = route.extractID(item.url);
+        const url = route.find(pageName, { id });
+        const text = item.pending ? '...' : item[field];
+        const linkProps = {
+            href: url,
+            className: (item.pending) ? 'pending' : undefined,
+        };
+        return <li key={i}><a {...linkProps}>{text}</a></li>;
+    }
 }
 
 List.defaultProps = {
     field: 'name'
 };
 
+// set display name so it appears in React Dev Console when code is uglified
 List.displayName = 'List';
 
 export {

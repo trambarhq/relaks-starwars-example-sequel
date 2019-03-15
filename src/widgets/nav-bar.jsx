@@ -1,6 +1,4 @@
-import { h, Component } from 'preact';
-
-/** @jsx h */
+import React, { Component } from 'react';
 
 function NavBar(props) {
     let { route } = props;
@@ -31,6 +29,7 @@ function NavBar(props) {
     );
 }
 
+// set display name so it appears in React Dev Console when code is uglified
 NavBar.displayName = 'NavBar';
 
 function Button(props) {
