@@ -27,9 +27,6 @@ async function PlanetList(props) {
     }
 }
 
-// set display name so it appears in React Dev Console when code is uglified
-PlanetList.displayName = 'PlanetList';
-
 const asyncComponent = Relaks(PlanetList);
 
 export {

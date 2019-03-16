@@ -29,9 +29,6 @@ function NavBar(props) {
     );
 }
 
-// set display name so it appears in React Dev Console when code is uglified
-NavBar.displayName = 'NavBar';
-
 function Button(props) {
     let { route } = props;
     let linkProps = {
@@ -40,8 +37,6 @@ function Button(props) {
     };
     return <a {...linkProps}>{props.children}</a>;
 }
-
-Button.displayName = 'Button';
 
 export {
     NavBar as default,

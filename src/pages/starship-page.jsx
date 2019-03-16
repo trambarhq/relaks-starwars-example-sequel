@@ -44,9 +44,6 @@ async function StarshipPage(props) {
     }
 }
 
-// set display name so it appears in React Dev Console when code is uglified
-StarshipPage.displayName = 'StarshipPage';
-
 const asyncComponent = Relaks(StarshipPage);
 
 export {

@@ -44,9 +44,6 @@ async function SpeciesPage(props) {
     }
 }
 
-// set display name so it appears in React Dev Console when code is uglified
-SpeciesPage.displayName = 'SpeciesPage';
-
 const asyncComponent = Relaks(SpeciesPage);
 
 export {

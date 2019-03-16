@@ -8,9 +8,6 @@ function WelcomePage(props) {
     );
 }
 
-// set display name so it appears in React Dev Console when code is uglified
-WelcomePage.displayName = 'WelcomePage';
-
 export {
     WelcomePage as default,
     WelcomePage

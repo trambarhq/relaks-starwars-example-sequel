@@ -42,9 +42,6 @@ async function VehiclePage(props) {
     }
 }
 
-// set display name so it appears in React Dev Console when code is uglified
-VehiclePage.displayName = 'VehiclePage';
-
 const asyncComponent = Relaks(VehiclePage);
 
 export {

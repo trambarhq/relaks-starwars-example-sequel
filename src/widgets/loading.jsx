@@ -10,9 +10,6 @@ function Loading() {
     );
 }
 
-// set display name so it appears in React Dev Console when code is uglified
-Loading.displayName = 'Loading';
-
 export {
     Loading as default,
     Loading

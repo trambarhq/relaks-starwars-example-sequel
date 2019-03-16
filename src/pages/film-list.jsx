@@ -27,9 +27,6 @@ async function FilmList(props) {
     }
 }
 
-// set display name so it appears in React Dev Console when code is uglified
-FilmList.displayName = 'FilmList';
-
 const asyncComponent = Relaks(FilmList);
 
 export {
