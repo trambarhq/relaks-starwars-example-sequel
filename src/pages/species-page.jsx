@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Relaks, { useProgress } from 'relaks/hooks';
+import Relaks, { useProgress } from 'relaks';
 import { List } from 'widgets/list';
 import Loading from 'widgets/loading';
 
@@ -44,9 +44,9 @@ async function SpeciesPage(props) {
     }
 }
 
-const asyncComponent = Relaks(SpeciesPage);
+const component = Relaks.memo(SpeciesPage);
 
 export {
-    asyncComponent as default,
-    asyncComponent as SpeciesPage,
+    component as default,
+    component as SpeciesPage,
 };

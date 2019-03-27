@@ -1,5 +1,5 @@
 import React from 'react';
-import Relaks, { useProgress } from 'relaks/hooks';
+import Relaks, { useProgress } from 'relaks';
 import List from 'widgets/list';
 import Loading from 'widgets/loading';
 
@@ -26,9 +26,9 @@ async function CharacterList(props) {
     };
 }
 
-const asyncComponent = Relaks(CharacterList);
+const component = Relaks.memo(CharacterList);
 
 export {
-    asyncComponent as default,
-    asyncComponent as CharacterList,
+    component as default,
+    component as CharacterList,
 };
