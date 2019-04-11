@@ -1,7 +1,7 @@
 import React from 'react';
 import Relaks, { useProgress } from 'relaks';
-import List from 'widgets/list';
-import Loading from 'widgets/loading';
+import { List } from 'widgets/list';
+import { Loading } from 'widgets/loading';
 
 async function CharacterList(props) {
     const { route, swapi } = props;
@@ -29,6 +29,5 @@ async function CharacterList(props) {
 const component = Relaks.memo(CharacterList);
 
 export {
-    component as default,
     component as CharacterList,
 };

@@ -62,7 +62,7 @@ module.exports = {
     ],
     optimization: {
         concatenateModules: false,
-    },    
+    },
     devtool: (event === 'build') ? 'source-map' : 'inline-source-map',
     devServer: {
         inline: true,

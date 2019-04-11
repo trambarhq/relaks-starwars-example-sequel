@@ -1,7 +1,7 @@
 import React from 'react';
 import Relaks, { useProgress } from 'relaks';
-import List from 'widgets/list';
-import Loading from 'widgets/loading';
+import { List } from 'widgets/list';
+import { Loading } from 'widgets/loading';
 
 async function PlanetList(props) {
     const { route, swapi } = props;

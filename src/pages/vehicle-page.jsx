@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Relaks, { useProgress } from 'relaks';
 import { List } from 'widgets/list';
-import Loading from 'widgets/loading';
+import { Loading } from 'widgets/loading';
 
 async function VehiclePage(props) {
     const { route, swapi } = props;
@@ -45,6 +45,5 @@ async function VehiclePage(props) {
 const component = Relaks.memo(VehiclePage);
 
 export {
-    component as default,
     component as VehiclePage,
 };
