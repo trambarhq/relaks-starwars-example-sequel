@@ -8,21 +8,20 @@ import 'style.scss';
 function FrontEnd(props) {
     const { routeManager, dataSource } = props;
     const [ routeChanged, setRouteChanged ] = useEventTime();
-    const [ swapiChanged, setSWAPIChanged ] = useEventTime();
+    const [ dataChanged, setDataChanged ] = useEventTime();
     const route = useMemo(() => {
         return new Route(routeManager);
     }, [ routeManager, routeChanged ]);
     const swapi = useMemo(() => {
         return new SWAPI(dataSource);
-    }, [ dataSource, swapiChanged ]);
+    }, [ dataSource, dataChanged ]);
 
     useEffect(() => {
         routeManager.addEventListener('change', setRouteChanged);
-        dataSource.addEventListener('change', setSWAPIChanged);
-
+        dataSource.addEventListener('change', setDataChanged);
         return () => {
             routeManager.removeEventListener('change', setRouteChanged);
-            dataSource.removeEventListener('change', setSWAPIChanged);
+            dataSource.removeEventListener('change', setDataChanged);
         };
     });
 

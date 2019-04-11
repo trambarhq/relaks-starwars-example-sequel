@@ -5,6 +5,8 @@ import { routes } from 'routing';
 import DjangoDataSource from 'relaks-django-data-source';
 import RouteManager from 'relaks-route-manager';
 
+window.addEventListener('load', initialize);
+
 async function initialize(evt) {
     // create remote data source
     const dataSource = new DjangoDataSource({
@@ -24,5 +26,3 @@ async function initialize(evt) {
     const element = createElement(FrontEnd, { dataSource, routeManager });
     render(element, container);
 }
-
-window.addEventListener('load', initialize);

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 function List(props) {
     let { route, urls, items, field, pageName } = props;
@@ -42,6 +42,5 @@ List.defaultProps = {
 };
 
 export {
-    List as default,
     List
 };
