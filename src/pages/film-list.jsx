@@ -30,5 +30,5 @@ async function FilmList(props) {
 const component = Relaks.memo(FilmList);
 
 export {
-    component as FilmList,
+    component as default,
 };

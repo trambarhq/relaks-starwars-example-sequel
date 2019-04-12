@@ -15,19 +15,20 @@ async function CharacterList(props) {
 
     function render() {
         if (!people) {
-            return <Loading />;
+            show(<Loading />);
+        } else {
+            show(
+                <div>
+                    <h1>Characters</h1>
+                    <List items={people} field="name" pageName="character-summary" route={route} />
+                </div>
+            );
         }
-        show(
-            <div>
-                <h1>Characters</h1>
-                <List items={people} field="name" pageName="character-summary" route={route} />
-            </div>
-        );
     };
 }
 
 const component = Relaks.memo(CharacterList);
 
 export {
-    component as CharacterList,
+    component as default,
 };

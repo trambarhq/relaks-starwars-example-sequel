@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Relaks, { useProgress } from 'relaks';
 import { List } from 'widgets/list';
 import { Loading } from 'widgets/loading';
@@ -44,9 +44,8 @@ async function StarshipPage(props) {
     }
 }
 
-const component = Relaks(StarshipPage);
+const component = Relaks.memo(StarshipPage);
 
 export {
     component as default,
-    component as StarshipPage,
 };

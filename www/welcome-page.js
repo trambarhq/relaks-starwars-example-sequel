@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["welcome-page"],{114:function(e,l,t){"use strict";Object.defineProperty(l,"__esModule",{value:!0}),l.WelcomePage=l.default=void 0;var u,a=t(8),n=(u=a)&&u.__esModule?u:{default:u};function o(e){return n.default.createElement("div",null,n.default.createElement("h1",null,"Welcome!"))}l.default=o,l.WelcomePage=o}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([["welcome-page"],{116:function(e,n,t){"use strict";t.r(n),t.d(n,"default",function(){return a});var c=t(1),u=t.n(c);function a(e){return u.a.createElement("div",null,u.a.createElement("h1",null,"Welcome!"))}}}]);
 //# sourceMappingURL=welcome-page.js.map

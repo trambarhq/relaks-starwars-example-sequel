@@ -31,5 +31,4 @@ const component = Relaks.memo(VehicleList);
 
 export {
     component as default,
-    component as VehicleList,
 };

@@ -31,5 +31,4 @@ const component = Relaks.memo(SpeciesList);
 
 export {
     component as default,
-    component as SpeciesList,
 };

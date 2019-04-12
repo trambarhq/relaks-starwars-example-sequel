@@ -31,5 +31,4 @@ const component = Relaks.memo(StarshipList);
 
 export {
     component as default,
-    component as StarshipList,
 };

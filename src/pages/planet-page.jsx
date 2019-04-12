@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Relaks, { useProgress } from 'relaks';
 import { List } from 'widgets/list';
 import { Loading } from 'widgets/loading';
@@ -44,5 +44,4 @@ const component = Relaks.memo(PlanetPage);
 
 export {
     component as default,
-    component as PlanetPage,
 };
