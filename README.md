@@ -336,7 +336,7 @@ export {
 };
 ```
 
-`person` can now be `undefined` so `render()` has to heck for that and display a page loading animation when the object is absent. When navigating from `CharacterList`, the animation will be skipped since the object can be found in the cache. We'll only see it when the browser loads the page directly. 
+`person` can now be `undefined` so `render()` has to check for that and display a page loading animation when the object is absent. When navigating from `CharacterList`, the animation will be skipped since the object will be found in the cache. We'll only see it when the browser loads the page directly. 
 
 ## Other pages
 
