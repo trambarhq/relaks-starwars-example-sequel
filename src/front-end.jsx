@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useEventTime } from 'relaks';
 import { SWAPI } from 'swapi';
 import { Route } from 'routing';
@@ -23,7 +23,7 @@ function FrontEnd(props) {
             routeManager.removeEventListener('change', setRouteChanged);
             dataSource.removeEventListener('change', setDataChanged);
         };
-    });
+    }, [ routeManager, dataSource ]);
 
     const PageComponent = route.params.module.default;
     return (

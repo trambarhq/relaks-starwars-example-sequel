@@ -20,7 +20,7 @@ async function StarshipList(props) {
             show(
                 <div>
                     <h1>Starships</h1>
-                    <List items={starships} field="name" pageName="starship-summary" route={route} />
+                    <List items={starships} pageName="starship-summary" route={route} />
                 </div>
             );
         }

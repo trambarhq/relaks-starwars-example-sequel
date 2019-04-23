@@ -20,7 +20,7 @@ async function SpeciesList(props) {
             show(
                 <div>
                     <h1>Species</h1>
-                    <List items={species} field="name" pageName="species-summary" route={route} />
+                    <List items={species} pageName="species-summary" route={route} />
                 </div>
             );
         }

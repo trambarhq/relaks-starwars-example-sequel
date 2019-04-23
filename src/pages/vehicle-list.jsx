@@ -20,7 +20,7 @@ async function VehicleList(props) {
             show(
                 <div>
                     <h1>Vehicles</h1>
-                    <List items={vehicles} field="name" pageName="vehicle-summary" route={route} />
+                    <List items={vehicles} pageName="vehicle-summary" route={route} />
                 </div>
             );
         }

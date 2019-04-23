@@ -20,7 +20,7 @@ async function PlanetList(props) {
             show(
                 <div>
                     <h1>Planets</h1>
-                    <List items={planets} field="name" pageName="planet-summary" route={route} />
+                    <List items={planets} pageName="planet-summary" route={route} />
                 </div>
             );
         }

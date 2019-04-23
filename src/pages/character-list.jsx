@@ -20,7 +20,7 @@ async function CharacterList(props) {
             show(
                 <div>
                     <h1>Characters</h1>
-                    <List items={people} field="name" pageName="character-summary" route={route} />
+                    <List items={people} pageName="character-summary" route={route} />
                 </div>
             );
         }
