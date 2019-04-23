@@ -12,7 +12,7 @@ To see the code running in debug mode, first clone this repository. In the worki
 
 ## Bootstrap code
 
-We have to change the bookstrap code ([main.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/main.js)) a bit. `initialize()` is now declared as `async` as we need to use the `await` operator. It initializes a second object, `RouteManager`. The route manager maps the URL displayed in the browser's location bar to pages in the front-end. It'll intercept clicks on hyperlinks and handle them internally.
+We have to change the bookstrap code ([main.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/main.js)) a bit. `initialize()` is now declared as `async` as we need to use the `await` operator. It initializes a second object, `RouteManager`. The route manager maps the URL displayed in the browser's location bar to pages in the front-end. It'll also intercept clicks on hyperlinks and handle them internally.
 
 ```javascript
 import { createElement } from 'react';
@@ -45,8 +45,8 @@ async function initialize(evt) {
 }
 ```
 
-We'll using hash fallback mode for the production version so that the front-end will work properly when loaded as a file ([pushState()](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
-does not work at a file:// location). It also make hosting the example easier.
+For the production version we'll be using hash fallback so that the front-end will work properly when loaded as a file ([pushState()](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
+does not work at a file:// location). It also makes hosting the example easier.
 
 ## FrontEnd
 
@@ -149,7 +149,7 @@ In addition to parameters extracted from the URL, the route parameters include a
     );
 ```
 
-We have to explicitly ask for the `default` export here, because it isn't picked automatically when `require()` or `import()` is used to import a JavaScript module.
+We have to explicitly ask for the `default` export here as it isn't picked automatically when `require()` or `import()` is used to import a JavaScript module.
 
 ## Routing
 
@@ -173,9 +173,9 @@ The following is one of the routes:
 
 `load` is an async function that loads the module for the page. The module is placed into `match.params.module`, which is referenced by `FrontEnd`.
 
-We're using [code-splitting](https://webpack.js.org/guides/code-splitting/) to reduce initial load time. The code for each page will be kept in a separate file which will be loaded as necessary. The *webpackChunkName* comment assigns a name to the code chunk holding the module. The name forms part of the name of the JavaScript file. Without it the file would end up with an unintuitive numeric name.
+We're using [code-splitting](https://webpack.js.org/guides/code-splitting/) to reduce initial load time. The code for each page will be kept in a separate file which will be loaded as necessary. The *webpackChunkName* comment assigns a name to the code chunk holding the module. That's used to name the JavaScript file. Without it the file would end up with an unintuitive numeric name.
 
-If code-splitting isn't necessary, `require()` can be used to import the module instead and `load()` wouldn't need to be async.
+If code-splitting isn't necessary, `require()` can be used to import the module instead and `load()` wouldn't have to be async.
 
 ## CharacterList
 
@@ -218,7 +218,7 @@ export {
 };
 ```
 
-`List` ([list.jsx](https://github.com/trambarhq/relaks-starwars-example-isomorphic/blob/master/src/widgets/list.jsx)) is a component that draw a list of items:
+We have moved the code for drawing a list of items into the reusable component `List` ([list.jsx](https://github.com/trambarhq/relaks-starwars-example-isomorphic/blob/master/src/widgets/list.jsx)):
 
 ```javascript
 import React from 'react';
@@ -273,7 +273,7 @@ The `find()` method of `route` is used to generate a URL to the summary page of 
 
 ## CharacterPage
 
-The `renderAsync()` method of `CharacterPage` ([character-page.jsx](https://github.com/trambarhq/relaks-starwars-example-sequal/blob/master/src/pages/character-page.jsx)) is also largely unchanged. Instead of receiving `person` as a prop, it's now necessary to fetch the object, using the id from the route.
+`CharacterPage` ([character-page.jsx](https://github.com/trambarhq/relaks-starwars-example-sequal/blob/master/src/pages/character-page.jsx)) is also largely unchanged. Instead of receiving `person` as a prop, it now fetches the object from Django, using the id from the route.
 
 ```javascript
 import React from 'react';
@@ -335,6 +335,8 @@ export {
     component as CharacterPage,
 };
 ```
+
+`person` can now be `undefined` so `render()` has to heck for that and display a page loading animation when the object is absent. When navigating from `CharacterList`, the animation will be skipped since the object can be found in the cache. We'll only see it when the browser loads the page directly. 
 
 ## Other pages
 
