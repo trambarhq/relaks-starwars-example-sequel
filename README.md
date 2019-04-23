@@ -1,29 +1,18 @@
 Relaks Star Wars Example - the Sequel
 -------------------------------------
-This is a continuation of the [Relaks Star Wars Example](https://github.com/trambarhq/relaks-starwars-example). The front-end is now fully built out. Instead of just the character list, all the information provided by [https://swapi.co/](https://swapi.co/) is available. It's also properly integrated with the browser's history functionality. It's a more realistic demonstration of what an front-end built using [Preact](https://preactjs.com/) and [Relaks](https://github.com/trambarhq/relaks) would work.
-
-You can see the code in action [here](https://trambar.io/examples/starwars-v/). You can view its WebPack bundle analysis [here](https://trambar.io/examples/starwars-v/report.html).
-When gzipped, it's just around 30 KB.
+This is a continuation of the [Relaks Star Wars Example](https://github.com/trambarhq/relaks-starwars-example). We're going to build out our front-end more fully. Instead of just the character list, we'll make all information provided by [https://swapi.co/](https://swapi.co/) available. We'll also make the site work properly with the browser's history functionality. You can see the code in action [here](https://trambar.io/examples/starwars-v/). You can view its WebPack bundle analysis [here](https://trambar.io/examples/starwars-v/report.html). When gzipped, it's around 60 KB.
 
 [![Screenshot](docs/img/screenshot.png)](https://trambar.io/examples/starwars-v/)
 
 The example makes use of [relaks-route-manager](https://github.com/trambarhq/relaks-route-manager) and [relaks-django-data-source](https://github.com/trambarhq/relaks-django-data-source).
 
-* [Getting started](#getting-started)
-* [FrontEnd](#frontend)
-* [Routing](#routing)
-* [Character list](#character-list)
-* [Character page](#character-page)
-* [Other pages](#other-pages)
-* [Next step](#next-step)
-
 ## Getting started
 
-To see the code running in debug mode, first clone this repository. In the working folder, run `npm install`. Once that's done, run `npm run start` to launch [WebPack Dev Server](https://webpack.js.org/configuration/dev-server/). Open a browser window and enter `http://localhost:8080` as the location.
+To see the code running in debug mode, first clone this repository. In the working folder, run `npm install`. Once that's done, run `npm run dev` to launch [WebPack Dev Server](https://webpack.js.org/configuration/dev-server/). Open a browser window and enter `http://localhost:8080` as the location.
 
-## FrontEnd
+## Bootstrap code
 
-The `initialize()` function ([main.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/main.js)) has changed slightly. The function has to be declared as `async`, since we need to use the `await` operator. It initializes a second object, `RouteManager`. The route manager maps the URL displayed in the browser's location bar to pages in the front-end. It'll intercept clicks on hyperlinks and handle them internally.
+We have to change the bookstrap code ([main.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/main.js)) a bit. `initialize()` is now declared as `async` as we need to use the `await` operator. It initializes a second object, `RouteManager`. The route manager maps the URL displayed in the browser's location bar to pages in the front-end. It'll intercept clicks on hyperlinks and handle them internally.
 
 ```javascript
 import { createElement } from 'react';
@@ -56,14 +45,15 @@ async function initialize(evt) {
 }
 ```
 
-We'll using hash fallback mode for the production version, so that the front-end will work properly when loaded as a file ([pushState()](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
+We'll using hash fallback mode for the production version so that the front-end will work properly when loaded as a file ([pushState()](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
 does not work at a file:// location). It also make hosting the example easier.
 
-The `render()` method of `FrontEnd` ([front-end.jsx](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/front-end.jsx)) has changed quite a bit. The front-end now has a nav bar. It's
-also using a router to determine which page to render:
+## FrontEnd
+
+The source code of `FrontEnd` ([front-end.jsx](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/front-end.jsx)) is listed below.
 
 ```javascript
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useEventTime } from 'relaks';
 import { SWAPI } from 'swapi';
 import { Route } from 'routing';
@@ -88,7 +78,7 @@ function FrontEnd(props) {
             routeManager.removeEventListener('change', setRouteChanged);
             dataSource.removeEventListener('change', setDataChanged);
         };
-    });
+    }, [ routeManager, dataSource ]);
 
     const PageComponent = route.params.module.default;
     return (
@@ -106,7 +96,60 @@ export {
 };
 ```
 
-In addition to route parameters extracted from the current URL, the route object contains a reference to the module used to generate the page. We have to explicitly ask for the `default` export here, because it isn't picked automatically when `require()` or `import()` is used to import a JavaScript module.
+As before, we start by assigning the component's props to local variables:
+
+```javascript
+    const { routeManager, dataSource } = props;
+```
+
+We need to add another `useEventTime` hook to keep track of `change` event from the route manager:
+
+```javascript
+    const [ routeChanged, setRouteChanged ] = useEventTime();
+    const [ dataChanged, setDataChanged ] = useEventTime();
+```
+
+And another `useMemo` hook to maintain an `Route` proxy object ([routing.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/routing.js))
+
+```javascript
+    const route = useMemo(() => {
+        return new Route(routeManager);
+    }, [ routeManager, routeChanged ]);
+    const swapi = useMemo(() => {
+        return new SWAPI(dataSource);
+    }, [ dataSource, dataChanged ]);
+```
+
+Again, we're using a `useEffect` hook to attach event handlers:
+
+```javascript
+    useEffect(() => {
+        routeManager.addEventListener('change', setRouteChanged);
+        dataSource.addEventListener('change', setDataChanged);
+        return () => {
+            routeManager.removeEventListener('change', setRouteChanged);
+            dataSource.removeEventListener('change', setDataChanged);
+        };
+    });
+```
+
+We don't need a state variable to keep track of what's selected since that comes from the browser location. We also don't need callbacks as navigation is handled by the route manager.
+
+In addition to parameters extracted from the URL, the route parameters include a reference to the module for the matching page. We use that to render the page:
+
+```javascript
+    const PageComponent = route.params.module.default;
+    return (
+        <div>
+            <NavBar route={route} />
+            <div className="contents">
+                <PageComponent route={route} swapi={swapi} />
+            </div>
+        </div>
+    );
+```
+
+We have to explicitly ask for the `default` export here, because it isn't picked automatically when `require()` or `import()` is used to import a JavaScript module.
 
 ## Routing
 
@@ -128,13 +171,15 @@ The following is one of the routes:
 
 `params` controls the typecasting of extracted parameters. In this case we want `id` to be a number.
 
-`load` is an async function that loads the module for the page. The module is placed into `match.params.module`, which is referenced by `render()` of `FrontEnd`.
+`load` is an async function that loads the module for the page. The module is placed into `match.params.module`, which is referenced by `FrontEnd`.
 
-The *webpackChunkName* comment assigns a name to the code chunk holding the module. The name forms part of the name of the resultant JavaScript file. Without it the file would end up with an unintuitive numeric name.
+We're using [code-splitting](https://webpack.js.org/guides/code-splitting/) to reduce initial load time. The code for each page will be kept in a separate file which will be loaded as necessary. The *webpackChunkName* comment assigns a name to the code chunk holding the module. The name forms part of the name of the JavaScript file. Without it the file would end up with an unintuitive numeric name.
 
-## Character list
+If code-splitting isn't necessary, `require()` can be used to import the module instead and `load()` wouldn't need to be async.
 
-The `renderAsync()` method of `CharacterList` ([character-list.jsx](https://github.com/trambarhq/relaks-starwars-example-isomorphic/blob/master/src/pages/character-list.jsx)) is largely the same as before. The only difference is `route` is now passed to to `CharacterListSync` (instead of the callback function `onSelect`).
+## CharacterList
+
+`CharacterList` ([character-list.jsx](https://github.com/trambarhq/relaks-starwars-example-isomorphic/blob/master/src/pages/character-list.jsx)) is largely the same as before.
 
 ```javascript
 import React from 'react';
@@ -154,14 +199,15 @@ async function CharacterList(props) {
 
     function render() {
         if (!people) {
-            return <Loading />;
+            show(<Loading />);
+        } else {
+            show(
+                <div>
+                    <h1>Characters</h1>
+                    <List items={people} field="name" pageName="character-summary" route={route} />
+                </div>
+            );
         }
-        show(
-            <div>
-                <h1>Characters</h1>
-                <List items={people} field="name" pageName="character-summary" route={route} />
-            </div>
-        );
     };
 }
 
@@ -172,13 +218,7 @@ export {
 };
 ```
 
-The `render()` method of `CharacterListSync` has been refactored so that it uses a reusable component to draw the list:
-
-```javascript
-/* ... */
-```
-
-`List` ([list.jsx](https://github.com/trambarhq/relaks-starwars-example-isomorphic/blob/master/src/widgets/list.jsx)) is a stateless component that draw a list of items:
+`List` ([list.jsx](https://github.com/trambarhq/relaks-starwars-example-isomorphic/blob/master/src/widgets/list.jsx)) is a component that draw a list of items:
 
 ```javascript
 import React from 'react';
@@ -231,12 +271,12 @@ export {
 
 The `find()` method of `route` is used to generate a URL to the summary page of an item. `pageName` corresponds to the key of the desired route in the routing table ([routing.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/routing.js)).
 
-## Character page
+## CharacterPage
 
 The `renderAsync()` method of `CharacterPage` ([character-page.jsx](https://github.com/trambarhq/relaks-starwars-example-sequal/blob/master/src/pages/character-page.jsx)) is also largely unchanged. Instead of receiving `person` as a prop, it's now necessary to fetch the object, using the id from the route.
 
 ```javascript
-import React, { Component } from 'react';
+import React from 'react';
 import Relaks, { useProgress } from 'relaks';
 import { List } from 'widgets/list';
 import { Loading } from 'widgets/loading';
@@ -294,12 +334,6 @@ const component = Relaks.memo(CharacterPage);
 export {
     component as CharacterPage,
 };
-```
-
-The `render()` method of `CharacterPageSync` ([character-page.jsx](https://github.com/trambarhq/relaks-starwars-example-sequal/blob/master/src/pages/character-page.jsx)) is also largely the same. Redundant code for drawing lists was refactored out. The method also returns a loading animation when `person` is `undefined`.
-
-```javascript
-/* ... */
 ```
 
 ## Other pages
