@@ -12,7 +12,7 @@ To see the code running in debug mode, first clone this repository. In the worki
 
 ## Bootstrap code
 
-We have to change the bookstrap code ([main.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/main.js)) a bit. `initialize()` is now declared as `async` as we need to use the `await` operator. It initializes a second object, `RouteManager`. The route manager maps the URL displayed in the browser's location bar to pages in the front-end. It'll also intercept clicks on hyperlinks and handle them internally.
+We have to change the bookstrap code ([main.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/main.js)) a bit. `initialize()` is now declared as `async` as we need to use the `await` operator. It initializes a second object, `RouteManager`. The route manager maps the URL displayed in the browser's location bar to a page component. It'll also intercept clicks on hyperlinks and handle them internally.
 
 ```javascript
 import { createElement } from 'react';
@@ -45,7 +45,7 @@ async function initialize(evt) {
 }
 ```
 
-For the production version we'll be using hash fallback so that the front-end will work properly when loaded as a file ([pushState()](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
+For the production version we'll use hash fallback so that the front-end will work properly when loaded as a file ([pushState()](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries)
 does not work at a file:// location). It also makes hosting the example easier.
 
 ## FrontEnd
@@ -130,10 +130,10 @@ Again, we're using a `useEffect` hook to attach event handlers:
             routeManager.removeEventListener('change', setRouteChanged);
             dataSource.removeEventListener('change', setDataChanged);
         };
-    });
+    }, [ dataSource, dataChanged ]);
 ```
 
-We don't need a state variable to keep track of what's selected since that comes from the browser location. We also don't need callbacks as navigation is handled by the route manager.
+We don't need a state variable to keep track of what's selected anymore since that comes from the browser location. We also don't need callbacks as navigation is handled by the route manager.
 
 In addition to parameters extracted from the URL, the route parameters include a reference to the module for the matching page. We use that to render the page:
 
@@ -153,7 +153,7 @@ We have to explicitly ask for the `default` export here as it isn't picked autom
 
 ## Routing
 
-Route definitions for the front-end's various pages are contained in [routing.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/routing.js). The file also contains the proxy object for the route manager.
+Route definitions for the front-end's various pages are contained in [routing.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/routing.js). The file also contains the route manager's proxy class.
 
 The following is one of the routes:
 
@@ -336,7 +336,7 @@ export {
 };
 ```
 
-`person` can now be `undefined` so `render()` has to check for that and display a page loading animation when the object is absent. When navigating from `CharacterList`, the animation will be skipped since the object will be found in the cache. We'll only see it when the browser loads the page directly. 
+`person` can now be `undefined` so `render()` has to check for that and display a page loading animation when the object is absent. When navigating from `CharacterList`, the animation will be skipped since the object will be found in the cache. We'll only see it when the browser loads the page directly.
 
 ## Other pages
 
