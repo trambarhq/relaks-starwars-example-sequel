@@ -15,18 +15,18 @@ class Route {
     }
 
     extractID(url) {
-        var si = url.lastIndexOf('/');
-        var ei;
+        let si = url.lastIndexOf('/');
+        let ei;
         if (si === url.length - 1) {
             ei = si;
             si = url.lastIndexOf('/', ei - 1);
         }
-        var text = url.substring(si + 1, ei);
+        const text = url.substring(si + 1, ei);
         return parseInt(text);
     }
 }
 
-let routes = {
+const routes = {
     'welcome': {
         path: '/',
         load: async (match) => {
@@ -113,4 +113,7 @@ let routes = {
     },
 };
 
-export { Route, routes };
+export {
+    Route,
+    routes
+};

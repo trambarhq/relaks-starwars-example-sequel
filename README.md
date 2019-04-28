@@ -109,7 +109,7 @@ We need to add another `useEventTime` hook to keep track of `change` event from 
     const [ dataChanged, setDataChanged ] = useEventTime();
 ```
 
-And another `useMemo` hook to maintain an `Route` proxy object ([routing.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/routing.js))
+And another `useMemo` hook to maintain a `Route` proxy object ([routing.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/routing.js))
 
 ```javascript
     const route = useMemo(() => {
@@ -153,7 +153,7 @@ We have to explicitly ask for the `default` export here as it isn't picked autom
 
 ## Routing
 
-Route definitions for the front-end's various pages are contained in [routing.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/routing.js). The file also contains the route manager's proxy class.
+Route definitions for the front-end's various pages are contained in [routing.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/routing.js#L29). The file also contains the route manager's proxy class.
 
 The following is one of the routes:
 
@@ -179,7 +179,7 @@ If code-splitting isn't necessary, `require()` can be used to import the module 
 
 ## CharacterList
 
-`CharacterList` ([character-list.jsx](https://github.com/trambarhq/relaks-starwars-example-isomorphic/blob/master/src/pages/character-list.jsx)) is largely the same as before.
+`CharacterList` ([character-list.jsx](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/pages/character-list.jsx)) is largely the same as before.
 
 ```javascript
 import React from 'react';
@@ -218,7 +218,7 @@ export {
 };
 ```
 
-We have moved the code for drawing a list of items into the reusable component `List` ([list.jsx](https://github.com/trambarhq/relaks-starwars-example-isomorphic/blob/master/src/widgets/list.jsx)):
+We have moved the code for drawing a list of items into the reusable component `List` ([list.jsx](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/widgets/list.jsx)):
 
 ```javascript
 import React from 'react';
@@ -273,7 +273,7 @@ The `find()` method of `route` is used to generate a URL to the summary page of 
 
 ## CharacterPage
 
-`CharacterPage` ([character-page.jsx](https://github.com/trambarhq/relaks-starwars-example-sequal/blob/master/src/pages/character-page.jsx)) is also largely unchanged. Instead of receiving `person` as a prop, it now fetches the object from Django, using the id from the route.
+`CharacterPage` ([character-page.jsx](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/pages/character-page.jsx)) is also largely unchanged. Instead of receiving `person` as a prop, it now fetches the object from Django, using the id from the route.
 
 ```javascript
 import React from 'react';
@@ -340,7 +340,7 @@ export {
 
 ## Other pages
 
-The [other pages](https://github.com/trambarhq/relaks-starwars-example-isomorphic/tree/master/src/pages) are all just copy-and-paste variants of the code described above.
+The [other pages](https://github.com/trambarhq/relaks-starwars-example-sequel/tree/master/src/pages) are all just copy-and-paste variants of the code described above.
 
 ## Next step
 
