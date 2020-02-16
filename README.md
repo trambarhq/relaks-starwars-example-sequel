@@ -8,7 +8,7 @@ The example makes use of [relaks-route-manager](https://github.com/trambarhq/rel
 
 ## Getting started
 
-To see the code running in debug mode, first clone this repository. In the working folder, run `npm install`. Once that's done, run `npm run dev` to launch [WebPack Dev Server](https://webpack.js.org/configuration/dev-server/). Open a browser window and enter `http://localhost:8080` as the location.
+To see the code running in debug mode, first clone this repository. In the working folder, run `npm install`. Once that's done, run `npm run dev` to launch [WebPack Dev Server](https://webpack.js.org/configuration/dev-server/). A browser window should open automatically. If not, open one and enter `http://localhost:8080` as the location.
 
 ## Bootstrap code
 
@@ -17,31 +17,31 @@ We have to change the bookstrap code ([main.js](https://github.com/trambarhq/rel
 ```javascript
 import { createElement } from 'react';
 import { render } from 'react-dom';
-import { FrontEnd } from 'front-end';
-import { routes } from 'routing';
-import DjangoDataSource from 'relaks-django-data-source';
-import RouteManager from 'relaks-route-manager';
+import { DataSource } from 'relaks-django-data-source';
+import { RouteManager } from 'relaks-route-manager';
+import { FrontEnd } from './front-end.jsx';
+import { routes } from './routing.js';
 
 window.addEventListener('load', initialize);
 
 async function initialize(evt) {
-    // create remote data source
-    const dataSource = new DjangoDataSource({
-        baseURL: 'https://swapi.co/api',
-    });
-    dataSource.activate();
+  // create remote data source
+  const dataSource = new DjangoDataSource({
+    baseURL: 'https://swapi.co/api',
+  });
+  dataSource.activate();
 
-    // create route manager
-    const routeManager = new RouteManager({
-        useHashFallback: (process.env.NODE_ENV === 'production'),
-        routes,
-    });
-    routeManager.activate();
-    await routeManager.start();
+  // create route manager
+  const routeManager = new RouteManager({
+    useHashFallback: (process.env.NODE_ENV === 'production'),
+    routes,
+  });
+  routeManager.activate();
+  await routeManager.start();
 
-    const container = document.getElementById('react-container');
-    const element = createElement(FrontEnd, { dataSource, routeManager });
-    render(element, container);
+  const container = document.getElementById('react-container');
+  const element = createElement(FrontEnd, { dataSource, routeManager });
+  render(element, container);
 }
 ```
 
@@ -55,82 +55,82 @@ The source code of `FrontEnd` ([front-end.jsx](https://github.com/trambarhq/rela
 ```javascript
 import React, { useEffect, useMemo } from 'react';
 import { useEventTime } from 'relaks';
-import { SWAPI } from 'swapi';
-import { Route } from 'routing';
-import { NavBar } from 'widgets/nav-bar';
-import 'style.scss';
+import { SWAPI } from './swapi.js';
+import { Route } from './routing.js';
+import { NavBar } from './widgets/nav-bar.jsx';
+import './style.scss';
 
 function FrontEnd(props) {
-    const { routeManager, dataSource } = props;
-    const [ routeChanged, setRouteChanged ] = useEventTime();
-    const [ dataChanged, setDataChanged ] = useEventTime();
-    const route = useMemo(() => {
-        return new Route(routeManager);
-    }, [ routeManager, routeChanged ]);
-    const swapi = useMemo(() => {
-        return new SWAPI(dataSource);
-    }, [ dataSource, dataChanged ]);
+  const { routeManager, dataSource } = props;
+  const [ routeChanged, setRouteChanged ] = useEventTime();
+  const [ dataChanged, setDataChanged ] = useEventTime();
+  const route = useMemo(() => {
+    return new Route(routeManager);
+  }, [ routeManager, routeChanged ]);
+  const swapi = useMemo(() => {
+    return new SWAPI(dataSource);
+  }, [ dataSource, dataChanged ]);
 
-    useEffect(() => {
-        routeManager.addEventListener('change', setRouteChanged);
-        dataSource.addEventListener('change', setDataChanged);
-        return () => {
-            routeManager.removeEventListener('change', setRouteChanged);
-            dataSource.removeEventListener('change', setDataChanged);
-        };
-    }, [ routeManager, dataSource ]);
+  useEffect(() => {
+    routeManager.addEventListener('change', setRouteChanged);
+    dataSource.addEventListener('change', setDataChanged);
+    return () => {
+      routeManager.removeEventListener('change', setRouteChanged);
+      dataSource.removeEventListener('change', setDataChanged);
+    };
+  }, [ routeManager, dataSource ]);
 
-    const PageComponent = route.params.module.default;
-    return (
-        <div>
-            <NavBar route={route} />
-            <div className="contents">
-                <PageComponent route={route} swapi={swapi} />
-            </div>
-        </div>
-    );
+  const PageComponent = route.params.module.default;
+  return (
+    <div>
+      <NavBar route={route} />
+      <div className="contents">
+        <PageComponent route={route} swapi={swapi} />
+      </div>
+    </div>
+  );
 }
 
 export {
-    FrontEnd
+  FrontEnd
 };
 ```
 
 As before, we start by assigning the component's props to local variables:
 
 ```javascript
-    const { routeManager, dataSource } = props;
+  const { routeManager, dataSource } = props;
 ```
 
 We need to add another `useEventTime` hook to keep track of `change` event from the route manager:
 
 ```javascript
-    const [ routeChanged, setRouteChanged ] = useEventTime();
-    const [ dataChanged, setDataChanged ] = useEventTime();
+  const [ routeChanged, setRouteChanged ] = useEventTime();
+  const [ dataChanged, setDataChanged ] = useEventTime();
 ```
 
 And another `useMemo` hook to maintain a `Route` proxy object ([routing.js](https://github.com/trambarhq/relaks-starwars-example-sequel/blob/master/src/routing.js))
 
 ```javascript
-    const route = useMemo(() => {
-        return new Route(routeManager);
-    }, [ routeManager, routeChanged ]);
-    const swapi = useMemo(() => {
-        return new SWAPI(dataSource);
-    }, [ dataSource, dataChanged ]);
+  const route = useMemo(() => {
+    return new Route(routeManager);
+  }, [ routeManager, routeChanged ]);
+  const swapi = useMemo(() => {
+    return new SWAPI(dataSource);
+  }, [ dataSource, dataChanged ]);
 ```
 
 Again, we're using a `useEffect` hook to attach event handlers:
 
 ```javascript
-    useEffect(() => {
-        routeManager.addEventListener('change', setRouteChanged);
-        dataSource.addEventListener('change', setDataChanged);
-        return () => {
-            routeManager.removeEventListener('change', setRouteChanged);
-            dataSource.removeEventListener('change', setDataChanged);
-        };
-    }, [ dataSource, dataChanged ]);
+  useEffect(() => {
+    routeManager.addEventListener('change', setRouteChanged);
+    dataSource.addEventListener('change', setDataChanged);
+    return () => {
+      routeManager.removeEventListener('change', setRouteChanged);
+      dataSource.removeEventListener('change', setDataChanged);
+    };
+  }, [ dataSource, dataChanged ]);
 ```
 
 We don't need a state variable to keep track of what's selected anymore since that comes from the browser location. We also don't need callbacks as navigation is handled by the route manager.
@@ -138,15 +138,15 @@ We don't need a state variable to keep track of what's selected anymore since th
 In addition to parameters extracted from the URL, the route parameters include a reference to the module for the matching page. We use that to render the page:
 
 ```javascript
-    const PageComponent = route.params.module.default;
-    return (
-        <div>
-            <NavBar route={route} />
-            <div className="contents">
-                <PageComponent route={route} swapi={swapi} />
-            </div>
-        </div>
-    );
+  const PageComponent = route.params.module.default;
+  return (
+    <div>
+      <NavBar route={route} />
+      <div className="contents">
+        <PageComponent route={route} swapi={swapi} />
+      </div>
+    </div>
+  );
 ```
 
 We have to explicitly ask for the `default` export here as it isn't picked automatically when `require()` or `import()` is used to import a JavaScript module.
@@ -159,11 +159,11 @@ The following is one of the routes:
 
 ```js
 'film-summary': {
-    path: '/films/${id}/',
-    params: { id: Number },
-    load: async (match) => {
-        match.params.module = await import('pages/film-page' /* webpackChunkName: "film-page" */);
-    }
+  path: '/films/${id}/',
+  params: { id: Number },
+  load: async (match) => {
+    match.params.module = await import('./pages/film-page.jsx' /* webpackChunkName: "film-page" */);
+  }
 },
 ```
 
@@ -184,37 +184,37 @@ If code-splitting isn't necessary, `require()` can be used to import the module 
 ```javascript
 import React from 'react';
 import Relaks, { useProgress } from 'relaks';
-import { List } from 'widgets/list';
-import { Loading } from 'widgets/loading';
+import { List } from '../widgets/list.jsx';
+import { Loading } from '../widgets/loading.jsx';
 
 async function CharacterList(props) {
-    const { route, swapi } = props;
-    const [ show ] = useProgress();
+  const { route, swapi } = props;
+  const [ show ] = useProgress();
 
-    render();
-    const people = await swapi.fetchList('/people/');
-    render();
+  render();
+  const people = await swapi.fetchList('/people/');
+  render();
 
-    people.more();
+  people.more();
 
-    function render() {
-        if (!people) {
-            show(<Loading />);
-        } else {
-            show(
-                <div>
-                    <h1>Characters</h1>
-                    <List items={people} field="name" pageName="character-summary" route={route} />
-                </div>
-            );
-        }
-    };
+  function render() {
+    if (!people) {
+      show(<Loading />);
+    } else {
+      show(
+        <div>
+          <h1>Characters</h1>
+          <List items={people} field="name" pageName="character-summary" route={route} />
+        </div>
+      );
+    }
+  };
 }
 
 const component = Relaks.memo(CharacterList);
 
 export {
-    component as CharacterList,
+  component as CharacterList,
 };
 ```
 
@@ -224,48 +224,48 @@ We have moved the code for drawing a list of items into the reusable component `
 import React from 'react';
 
 function List(props) {
-    let { route, urls, items, field, pageName } = props;
-    if (urls) {
-        // accept single URL and object
-        if (typeof(urls) === 'string') {
-            urls = [ urls ];
-            items = [ items ];
-        }
-        // deal with holes in the data set
-        items = urls.map((url, index) => {
-            let item = (items) ? items[index] : null;
-            if (!item) {
-                item = { url, pending: true };
-            }
-            return item;
-        });
+  let { route, urls, items, field, pageName } = props;
+  if (urls) {
+    // accept single URL and object
+    if (typeof(urls) === 'string') {
+      urls = [ urls ];
+      items = [ items ];
     }
-    if (!items) {
-        return null;
-    }
-    if (items.length === 0) {
-        return <ul className="empty"><li><span>none</span></li></ul>;
-    }
-    return <ul>{items.map(renderItem)}</ul>;
+    // deal with holes in the data set
+    items = urls.map((url, index) => {
+      let item = (items) ? items[index] : null;
+      if (!item) {
+        item = { url, pending: true };
+      }
+      return item;
+    });
+  }
+  if (!items) {
+    return null;
+  }
+  if (items.length === 0) {
+    return <ul className="empty"><li><span>none</span></li></ul>;
+  }
+  return <ul>{items.map(renderItem)}</ul>;
 
-    function renderItem(item, i) {
-        const id = route.extractID(item.url);
-        const url = route.find(pageName, { id });
-        const text = item.pending ? '...' : item[field];
-        const linkProps = {
-            href: url,
-            className: (item.pending) ? 'pending' : undefined,
-        };
-        return <li key={i}><a {...linkProps}>{text}</a></li>;
-    }
+  function renderItem(item, i) {
+    const id = route.extractID(item.url);
+    const url = route.find(pageName, { id });
+    const text = item.pending ? '...' : item[field];
+    const linkProps = {
+      href: url,
+      className: (item.pending) ? 'pending' : undefined,
+    };
+    return <li key={i}><a {...linkProps}>{text}</a></li>;
+  }
 }
 
 List.defaultProps = {
-    field: 'name'
+  field: 'name'
 };
 
 export {
-    List
+  List
 };
 ```
 
@@ -278,61 +278,61 @@ The `find()` method of `route` is used to generate a URL to the summary page of 
 ```javascript
 import React from 'react';
 import Relaks, { useProgress } from 'relaks';
-import { List } from 'widgets/list';
-import { Loading } from 'widgets/loading';
+import { List } from '../widgets/list.jsx';
+import { Loading } from '../widgets/loading.jsx';
 
 async function CharacterPage(props) {
-    const { route, swapi } = props;
-    const [ show ] = useProgress();
+  const { route, swapi } = props;
+  const [ show ] = useProgress();
 
-    render();
-    const person = await swapi.fetchOne(`/people/${route.params.id}/`);
-    render();
-    const films = await swapi.fetchMultiple(person.films, { minimum: '60%' });
-    render();
-    const species = await swapi.fetchMultiple(person.species, { minimum: '60%' });
-    render();
-    const homeworld = await swapi.fetchOne(person.homeworld);
-    render();
-    const vehicles = await swapi.fetchMultiple(person.vehicles, { minimum: '60%' });
-    render();
-    const starships = await swapi.fetchMultiple(person.starships, { minimum: '60%' });
-    render();
+  render();
+  const person = await swapi.fetchOne(`/people/${route.params.id}/`);
+  render();
+  const films = await swapi.fetchMultiple(person.films, { minimum: '60%' });
+  render();
+  const species = await swapi.fetchMultiple(person.species, { minimum: '60%' });
+  render();
+  const homeworld = await swapi.fetchOne(person.homeworld);
+  render();
+  const vehicles = await swapi.fetchMultiple(person.vehicles, { minimum: '60%' });
+  render();
+  const starships = await swapi.fetchMultiple(person.starships, { minimum: '60%' });
+  render();
 
-    function render() {
-        if (!person) {
-            show(<Loading />);
-        } else {
-            show(
-                <div>
-                    <h1>{person.name}</h1>
-                    <div>Height: {person.height} cm</div>
-                    <div>Mass: {person.mass} kg</div>
-                    <div>Hair color: {person.hair_color}</div>
-                    <div>Skin color: {person.skin_color}</div>
-                    <div>Hair color: {person.hair_color}</div>
-                    <div>Eye color: {person.eye_color}</div>
-                    <div>Birth year: {person.birth_year}</div>
-                    <h2>Homeworld</h2>
-                    <List urls={person.homeworld} items={homeworld} pageName="planet-summary" route={route} />
-                    <h2>Films</h2>
-                    <List urls={person.films} items={films} field="title" pageName="film-summary" route={route} />
-                    <h2>Species</h2>
-                    <List urls={person.species} items={species} pageName="species-summary" route={route} />
-                    <h2>Vehicles</h2>
-                    <List urls={person.vehicles} items={vehicles} pageName="vehicle-summary" route={route} />
-                    <h2>Starships</h2>
-                    <List urls={person.starships} items={starships} pageName="starship-summary" route={route} />
-                </div>
-            );
-        }
+  function render() {
+    if (!person) {
+      show(<Loading />);
+    } else {
+      show(
+        <div>
+          <h1>{person.name}</h1>
+          <div>Height: {person.height} cm</div>
+          <div>Mass: {person.mass} kg</div>
+          <div>Hair color: {person.hair_color}</div>
+          <div>Skin color: {person.skin_color}</div>
+          <div>Hair color: {person.hair_color}</div>
+          <div>Eye color: {person.eye_color}</div>
+          <div>Birth year: {person.birth_year}</div>
+          <h2>Homeworld</h2>
+          <List urls={person.homeworld} items={homeworld} pageName="planet-summary" route={route} />
+          <h2>Films</h2>
+          <List urls={person.films} items={films} field="title" pageName="film-summary" route={route} />
+          <h2>Species</h2>
+          <List urls={person.species} items={species} pageName="species-summary" route={route} />
+          <h2>Vehicles</h2>
+          <List urls={person.vehicles} items={vehicles} pageName="vehicle-summary" route={route} />
+          <h2>Starships</h2>
+          <List urls={person.starships} items={starships} pageName="starship-summary" route={route} />
+        </div>
+      );
     }
+  }
 }
 
 const component = Relaks.memo(CharacterPage);
 
 export {
-    component as CharacterPage,
+  component as CharacterPage,
 };
 ```
 
