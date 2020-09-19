@@ -1,6 +1,6 @@
 Relaks Star Wars Example - the Sequel
 -------------------------------------
-This is a continuation of the [Relaks Star Wars Example](https://github.com/trambarhq/relaks-starwars-example). We're going to build out our front-end more fully. Instead of just the character list, we'll make all information provided by [https://swapi.co/](https://swapi.co/) available. We'll also make the site work properly with the browser's history functionality. You can see the code in action [here](https://trambar.io/examples/starwars-v/). You can view its WebPack bundle analysis [here](https://trambar.io/examples/starwars-v/report.html). When gzipped, it's around 60 KB.
+This is a continuation of the [Relaks Star Wars Example](https://github.com/trambarhq/relaks-starwars-example). We're going to build out our front-end more fully. Instead of just the character list, we'll make all information provided by [https://swapi.dev/](https://swapi.dev/) available. We'll also make the site work properly with the browser's history functionality. You can see the code in action [here](https://trambar.io/examples/starwars-v/). You can view its WebPack bundle analysis [here](https://trambar.io/examples/starwars-v/report.html). When gzipped, it's around 60 KB.
 
 [![Screenshot](docs/img/screenshot.png)](https://trambar.io/examples/starwars-v/)
 
@@ -27,7 +27,7 @@ window.addEventListener('load', initialize);
 async function initialize(evt) {
   // create remote data source
   const dataSource = new DjangoDataSource({
-    baseURL: 'https://swapi.co/api',
+    baseURL: 'https://swapi.dev/api',
   });
   dataSource.activate();
 

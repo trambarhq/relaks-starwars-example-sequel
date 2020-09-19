@@ -10,7 +10,7 @@ window.addEventListener('load', initialize);
 async function initialize(evt) {
   // create remote data source
   const dataSource = new DataSource({
-    baseURL: 'https://swapi.co/api',
+    baseURL: 'https://swapi.dev/api',
   });
   dataSource.activate();
 
