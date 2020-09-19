@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["welcome-page"],{29:function(e,n,t){"use strict";t.r(n),t.d(n,"default",(function(){return a}));var c=t(0),u=t.n(c);function a(e){return u.a.createElement("div",null,u.a.createElement("h1",null,"Welcome!"))}}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([["welcome-page"],{32:function(e,n,t){"use strict";t.r(n),t.d(n,"default",(function(){return a}));var c=t(0),u=t.n(c);function a(e){return u.a.createElement("div",null,u.a.createElement("h1",null,"Welcome!"))}}}]);
 //# sourceMappingURL=welcome-page.js.map
