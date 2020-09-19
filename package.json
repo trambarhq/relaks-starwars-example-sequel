@@ -28,7 +28,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "relaks": "^2.1.11",
-    "relaks-django-data-source": "^2.0.2",
+    "relaks-django-data-source": "^2.0.3",
     "relaks-route-manager": "^2.0.8",
     "sass-loader": "^10.0.2",
     "style-loader": "^1.2.1",
